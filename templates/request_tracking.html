@@ -1,0 +1,5 @@
+<section class="card" id="request-tracking"><h2>Your request progress</h2>
+{% if history_error %}<p>Request history is temporarily unavailable. Please try again shortly.</p>{% elif request_history %}
+{% for item in request_history %}<article class="activity"><div><h3>{{ item.title }}</h3><p class="fine">{{ item.kind }}{% if item.detail %} · {{ item.detail }}{% endif %}</p><div>{% include 'request_progress.html' %}</div></div></article>{% endfor %}
+<p class="fine">Refresh this page for the latest background check. ETA is supplied by the download service and can change.</p>
+{% else %}<p>Your requests will appear here once your Ombi account is linked and you have made a request.</p>{% endif %}</section>

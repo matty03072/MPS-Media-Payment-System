@@ -58,7 +58,7 @@ def requests_for_members():
                             if isinstance(en,int) and ep.get('requested') and not ep.get('denied'):wanted.add(f'{sn}:{en}')
                     if not wanted:continue
                 results.append({'key':f'{kind}:{row["id"]}', 'owner':str(row['requestedUserId']), 'kind':kind,
-                    'provider':provider,'provider_id':str(pid),'wanted':wanted,'title':str(parent.get('title') or 'Your request')[:250],
+                    'approved':bool(row.get('approved')), 'provider':provider,'provider_id':str(pid),'wanted':wanted,'title':str(parent.get('title') or 'Your request')[:250],
                     'four_k':bool(parent.get('is4kRequest')) if kind=='movie' else False})
     return results
 
@@ -285,7 +285,7 @@ def settings():
     put('availability_enabled','1' if request.form.get('enabled')=='yes' else '0')
     put('availability_ai_provider',provider);put('availability_ai_url',url);put('availability_ai_model',model)
     if request.form.get('ai_key'):put('availability_ai_key',request.form['ai_key'].strip(),secret=True)
-    audit('Updated availability notification settings');db().commit();flash('Request email configuration saved.','success');return redirect('/admin/settings')
+    audit('Updated availability notification settings');db().commit();flash('Request email configuration saved.','success');return redirect('/admin/settings/smtp')
 
 
 def demo_content(member):
@@ -311,4 +311,4 @@ def demo():
         send_available(member,req,keys,chosen,demo=True)
         flash('SMTP accepted the demo for your administrator email.','success')
     except APIError:flash('Demo could not be sent. Check Emby and SMTP configuration.','error')
-    return redirect('/admin/settings')
+    return redirect('/admin/settings/smtp')

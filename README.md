@@ -4,7 +4,7 @@
 
 **One place to manage media memberships, payments and connected service accounts.**
 
-MPS is a self-hosted application that brings **Emby, Emby Connect, Ombi, Stripe, PayPal and email** together in one member portal and administrator dashboard. It connects the journey from invitation and signup to account creation, subscriptions and media access—reducing the need to manage every member separately in each service.
+MPS is a self-hosted application that brings **Emby, Emby Connect, Ombi, Sonarr, Radarr, Stripe, PayPal and email** together in one member portal and administrator dashboard. It connects the journey from invitation and signup to account creation, subscriptions and media access—reducing the need to manage every member separately in each service.
 
 Members can manage their membership, open Emby, discover and request content through Ombi, and manage their account security. Administrators can invite members, choose their servers and libraries, configure plans, monitor account setup and track revenue from the same application.
 
@@ -25,11 +25,22 @@ Once the administrator has connected the services, an invited member signs up th
 | **Emby** | Multi-server account creation, selected library and Live TV permissions, membership-based access control and linked-account management. Media playback remains in Emby. |
 | **Emby Connect** | New-account registration or authenticated account linking, connecting the member's server accounts to their Connect identity. |
 | **Ombi** | Automated member-account setup, authentication, content discovery and requests using the member's own linked account. |
+| **Sonarr and Radarr** | Member-scoped download status, queue percentage/ETA and TV episode import counts, with optional Emby library scans after confirmed imports. |
 | **Stripe and PayPal** | Optional subscription checkout, payment-status reconciliation and cancellation workflows connected to membership entitlement. |
 | **SMTP email** | Branded invitations, verification, password recovery, account notifications and optional media-availability messages. |
 | **Background worker** | Account provisioning, access reconciliation, retries and queued account-maintenance tasks. |
 
 MPS coordinates these services through their APIs; it does not replace the media server, request engine or payment provider. Administrators supply their own service URLs, credentials and settings before automation can run.
+
+## Connected services and request progress
+
+Configure **Sonarr** and **Radarr** under **Configuration → Connected services**. Test a connection without saving, save encrypted API keys, choose optional Emby scan targets, or disable tracking. No connections or credentials from another deployment are bundled.
+
+Members see only their own request progress on the dashboard and Requests page. Background checks run approximately every minute; refresh the page to see the latest status. Download percentages and estimated completion come from active queues. TV import progress counts requested episodes with imported files; film imports show status rather than an invented file-copy percentage.
+
+Optional Emby scans are deduplicated and triggered only after import evidence, for selected servers accessible to that member. “Available to watch” requires confirmation in their accessible Emby libraries. Sonarr/Radarr access is read-only; enabling this feature does not grant new library permissions.
+
+Configuration is organised into separate Emby, connected-service, SMTP, payment, Ombi and system pages. Emby server details can be edited and libraries rescanned without automatically changing existing member access.
 
 ## From invitation to access
 
@@ -69,6 +80,7 @@ Install `requirements.txt`, then run:
 
 ```sh
 python -m unittest installer.test_installation installer.test_umbrel.UmbrelTests installer.test_branding.BrandingTests -q
+PYTHONPATH=.:tests python -m unittest discover -s tests -p 'test_*.py' -q
 ```
 
 Images target `linux/amd64` and `linux/arm64`. Configuration, database and encryption keys persist together in `/state`. Back up this entire directory, not just SQLite.

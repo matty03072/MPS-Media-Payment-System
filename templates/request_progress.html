@@ -1,0 +1,6 @@
+{% if item.progress %}{% set progress=item.progress %}<strong>{{ progress.status }}</strong>
+{% if progress.percent is defined %}<div><progress aria-label="Download progress" max="100" value="{{ progress.percent }}"></progress> {{ progress.percent }}% downloaded <small>Active matching downloads</small></div>{% endif %}
+{% if progress.eta %}<small>Estimated completion: {{ progress.eta|replace('T',' ')|replace('Z',' UTC') }}</small>{% endif %}
+{% if progress.import_total %}<small>Imported episodes: {{ progress.import_count }}/{{ progress.import_total }} ({{ progress.import_percent }}%)</small>{% endif %}
+{% if progress.detail %}<small>{{ progress.detail }}</small>{% endif %}
+{% else %}{{ item.status }}{% endif %}

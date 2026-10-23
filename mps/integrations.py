@@ -75,7 +75,7 @@ class OmbiAPI:
             if str(row.get('requestedUserId') or '')!=str(user_id):return
             state=('Available' if row.get('available') is True else 'Declined' if row.get('denied') is True else
                    'Approved — queued / processing' if row.get('approved') is True else 'Pending approval')
-            entries.append({'title':title or 'Untitled request','kind':kind,'detail':detail,'status':state,'date':str(row.get('requestedDate') or '')[:10]})
+            entries.append({'key':('movie' if kind=='Movie' else 'tv')+':'+str(row.get('id','')), 'title':title or 'Untitled request','kind':kind,'detail':detail,'status':state,'date':str(row.get('requestedDate') or '')[:10]})
         for kind in ('movie','tv'):
             rows=self.call('GET','/Request/'+kind)
             if not isinstance(rows,list):raise APIError('Request history is temporarily unavailable.')

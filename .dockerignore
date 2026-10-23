@@ -9,3 +9,7 @@
 !container.py
 **/__pycache__
 **/*.pyc
+
+!tests/**
+**/__pycache__
+**/*.pyc

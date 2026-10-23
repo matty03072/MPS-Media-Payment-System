@@ -3,6 +3,7 @@ set -euo pipefail
 image="$1"
 platform="$2"
 docker run --rm --platform "$platform" --env MPS_CONFIG= --entrypoint python "$image" -m unittest installer.test_installation installer.test_umbrel.UmbrelTests installer.test_branding.BrandingTests -q
+docker run --rm --platform "$platform" --env MPS_CONFIG= --env PYTHONPATH=/app:/app/tests --entrypoint python "$image" -m unittest discover -s tests -p "test_*.py" -q
 state=$(mktemp -d)
 sudo chown 1000:1000 "$state"
 export UMBREL_BOOTSTRAP_PASSWORD

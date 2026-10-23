@@ -50,18 +50,31 @@ def add_server():
     if not name or len(name)>80 or not key or len(url)>350:abort(400,'Server name, URL and API key are required.')
     api=current_app.config.get('EMBY_FACTORY',Emby)(url,key);libraries=api.libraries();api.users()
     db().add(Server(name=name,url=url,key=seal(key),libraries=json.dumps(libraries)));audit('Connected Emby server');db().commit()
-    return redirect(url_for('admin.settings',_anchor='servers'))
+    return redirect(url_for('admin.settings',category='emby',_anchor='servers'))
 
 @bp.post('/servers/<int:sid>/refresh')
 @admin_required
 def refresh(sid):
     server=db().get(Server,sid)
     if not server:abort(404)
+    name=request.form.get('name',server.name).strip()
+    url=request.form.get('url',server.url).strip().rstrip('/')
     key=request.form.get('key','').strip()
-    api=current_app.config.get('EMBY_FACTORY',Emby)(server.url,key or unseal(server.key));libraries=api.libraries();api.users()
-    server.libraries=json.dumps(libraries)
+    try:parsed=urlsplit(url);valid_url=parsed.scheme in ('http','https') and parsed.hostname and not (parsed.username or parsed.password or parsed.query or parsed.fragment);parsed.port
+    except ValueError:valid_url=False
+    if not name or len(name)>80 or len(url)>350 or not valid_url:abort(400,'Enter a name and a valid HTTP(S) server URL without credentials, query or fragment.')
+    api=current_app.config.get('EMBY_FACTORY',Emby)(url,key or unseal(server.key))
+    libraries=api.libraries();users=api.users()
+    if url!=server.url:
+        linked_ids=set(db().scalars(select(Account.remote_id).where(Account.server_id==sid,Account.remote_id!='')))
+        if not linked_ids<={str(u.get('Id')) for u in users}:
+            abort(400,'This address does not contain the linked member accounts. Use the new address of the same Emby server, or add a separate server.')
+    # Commit connection details and the catalogue together only after successful checks.
+    server.name=name;server.url=url;server.libraries=json.dumps(libraries)
     if key:server.key=seal(key)
-    db().commit();flash('Server checked and libraries refreshed.','success');return redirect(url_for('admin.settings',_anchor='servers'))
+    audit('Updated Emby server details and refreshed library catalogue');db().commit()
+    flash('Server saved and libraries rescanned. New libraries are available in member permissions and new invitations. Existing access is unchanged.','success')
+    return redirect(url_for('admin.settings',category='emby',_anchor='servers'))
 
 @bp.post('/invites')
 @admin_required
@@ -136,8 +149,20 @@ def invite_action(iid,action):
     return redirect(url_for('admin.invitations'))
 
 @bp.route('/settings',methods=['GET','POST'])
+@bp.route('/settings/<category>',methods=['GET','POST'])
 @admin_required
-def settings():
+def settings(category=None):
+    categories = {
+        'emby': ('Emby servers', 'Connect your servers and refresh their libraries.'),
+        'services': ('Connected services', 'Track requests through download, import and Emby availability.'),
+        'smtp': ('SMTP settings', 'Manage outgoing email and request availability notifications.'),
+        'payments': ('Payment settings', 'Configure Stripe and PayPal subscriptions.'),
+        'ombi': ('Ombi settings', 'Connect your member request service.'),
+        'system': ('System information', 'Site details, hosting and account policies.'),
+    }
+    if category is not None and category not in categories:abort(404)
+    if request.method == 'GET' and category is None:
+        return redirect(url_for('admin.settings', category='emby'))
     if request.method=='POST':
         section=request.form.get('section')
         if section=='smtp':
@@ -186,8 +211,8 @@ def settings():
             if request.form.get('ombi_key'):put('ombi_key',request.form['ombi_key'].strip(),secret=True)
         else:abort(400,'Unknown settings section.')
         audit('Updated '+section+' configuration');db().commit();flash('Configuration saved. Secret values are not displayed.','success')
-        return redirect(url_for('admin.settings'))
-    return render_template('settings.html',servers=db().scalars(select(Server).order_by(Server.name)).all())
+        return redirect(url_for('admin.settings',category={'stripe':'payments','paypal':'payments','smtp':'smtp','ombi':'ombi'}[section]))
+    return render_template('settings.html',settings_page=category,settings_title=categories[category][0],settings_description=categories[category][1],servers=db().scalars(select(Server).order_by(Server.name)).all())
 
 @bp.post('/smtp/test')
 @admin_required
@@ -198,7 +223,7 @@ def smtp_test():
         flash('SMTP server accepted the test email for your administrator address. Check your inbox and spam folder.','success')
     except APIError as error:
         flash(str(error),'error')
-    return redirect(url_for('admin.settings'),303)
+    return redirect(url_for('admin.settings',category='smtp'),303)
 
 @bp.post('/plans')
 @admin_required

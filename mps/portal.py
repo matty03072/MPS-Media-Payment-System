@@ -30,10 +30,8 @@ def home():
     failed=member.billing_status in ('payment_failed','past_due','unpaid')
     membership_status=('Active' if not member.requires_payment else 'Payment failed' if failed else
         'Active' if member.paid_through>time.time() else 'Waiting for subscription payment')
-    history=[];history_error=False
-    if member.ombi_token and member.ombi_user_id:
-        try:history=current_app.config.get('OMBI_FACTORY',OmbiAPI)(unseal(member.ombi_token)).request_history(member.ombi_user_id)
-        except APIError:history_error=True
+    from .connected import read_history
+    history,history_error=read_history(member)
     return render_template('member.html',assigned_plan=chosen,paypal_subscription=current_subscription(member),paypal_plans=paypal_plans,
         member=member,plans=offered,membership_status=membership_status,payment_failed=failed,request_history=history,history_error=history_error)
 
@@ -146,4 +144,6 @@ def requests_page():
         if kind not in ('movie','tv') or len(query)>100:abort(400,'Invalid search.')
         rate_limit('ombi-search',60,member.id)
         results=factory(unseal(member.ombi_token)).search(kind,query)
-    return render_template('requests.html',member=member,results=results,kind=kind,query=query)
+    from .connected import read_history
+    history,history_error=read_history(member)
+    return render_template('requests.html',member=member,results=results,kind=kind,query=query,request_history=history,history_error=history_error)

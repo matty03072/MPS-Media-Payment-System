@@ -36,4 +36,6 @@ def tick():
         except Exception:db().rollback();audit('Member access sync requires attention');db().commit()
     from .availability import tick as availability_tick
     availability_tick()
+    from .connected import tick as connected_tick
+    connected_tick()
     put('worker_seen',str(time.time()));db().commit()

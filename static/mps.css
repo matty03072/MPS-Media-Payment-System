@@ -8,3 +8,5 @@ a:focus-visible,button:focus-visible{outline:3px solid #087d9b;outline-offset:4p
 .card.accent{background:linear-gradient(135deg,#effaff,#effbf5)}.server-icon{background:#e2f4fa;color:#086b78}.guide-tabs a[aria-current=page]{background:#086b78}.guide-number{background:#e2f4fa;color:#086b78}
 .public-header{gap:20px}.public-header>.eyebrow{font-size:9px;letter-spacing:1px}.welcome-copy h1{letter-spacing:-.045em;line-height:1.08;font-weight:750}.welcome-copy .lede{max-width:440px}footer span{overflow-wrap:anywhere}
 @media(max-width:720px){.public-header{flex-wrap:wrap;gap:12px}.public-header .brand{width:240px}.public-header>.eyebrow{display:none}.sidebar .brand{width:220px}.welcome-copy h1{font-size:clamp(36px,10vw,48px)}}
+
+.configuration-sidebar nav a[aria-current=page]{background:#e1f4fa;color:#075461;border-color:#b6e4ee}.configuration-sidebar nav a:hover{background:#eaf7fb}

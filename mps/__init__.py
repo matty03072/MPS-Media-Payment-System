@@ -82,8 +82,8 @@ def create_app(config=None):
     def health():
         with engine.connect() as conn:conn.exec_driver_sql('SELECT 1')
         return {'status':'ok','application':'MPS','version':'0.3.0','installer_version':'0.1.0','database':engine.dialect.name}
-    from . import auth,portal,admin,billing,management,paypal,revenue,plans,deletion,guides,availability
-    for blueprint in (auth.bp,portal.bp,admin.bp,billing.bp,management.bp,paypal.bp,revenue.bp,plans.bp,deletion.bp,guides.bp,availability.bp):app.register_blueprint(blueprint)
+    from . import auth,portal,admin,billing,management,paypal,revenue,plans,deletion,guides,availability,connected
+    for blueprint in (auth.bp,portal.bp,admin.bp,billing.bp,management.bp,paypal.bp,revenue.bp,plans.bp,deletion.bp,guides.bp,availability.bp,connected.bp):app.register_blueprint(blueprint)
     from .setup import bp as setup_bp
     app.register_blueprint(setup_bp)
     @app.cli.command('init-db')

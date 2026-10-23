@@ -31,3 +31,19 @@ html{min-height:100%;scroll-padding-top:24px}body{background:#edf3f7;background-
 @media(max-width:650px){.guide-grid{grid-template-columns:minmax(0,1fr)}.guide-step{padding:20px}.guide-contents ol{columns:1}.guide-step-heading{gap:10px}.guide-heading h1{font-size:1.9rem}.guide-tile-footer{flex-wrap:wrap}}
 @media(prefers-reduced-motion:reduce){.guide-tile{transition:none}.guide-tile:hover{transform:none}}
 .guide-tabs{flex-direction:row;align-items:center}.guide-tabs a{color:#284a59;flex:0 1 auto}.guide-tabs a[aria-current=page]{color:#fff}.guide-tabs a:hover{background:#dceee7;color:#064b3b}
+
+/* Category navigation beside the main sidebar, with a compact mobile menu. */
+.configuration-shell{grid-template-columns:250px 210px minmax(0,1fr);gap:12px}
+.configuration-sidebar{position:sticky;top:16px;height:calc(100dvh - 32px);padding:32px 14px;background:rgba(255,255,255,.7);border:1px solid white;border-radius:24px;box-shadow:var(--glass-shadow)}
+.configuration-sidebar>.eyebrow{margin:8px 12px 24px;font-size:10px}
+.configuration-sidebar nav{margin:0;gap:8px}
+.configuration-sidebar nav a{display:flex;justify-content:space-between;gap:10px;color:#354e5c;font-size:13px;padding:13px 12px;min-height:48px;border:1px solid transparent;border-radius:12px}
+.configuration-sidebar nav a:hover{background:#e5f4ee}
+.configuration-sidebar nav a[aria-current=page]{background:#d9efe6;color:#07563f;border-color:#beddd1;font-weight:700}
+.configuration-shell main{padding:34px clamp(16px,2.5vw,40px);width:100%;max-width:1200px}
+.configuration-shell .lede{max-width:none}
+.configuration-shell .card{overflow-wrap:anywhere}
+@media(max-width:1100px) and (min-width:721px){.configuration-shell{grid-template-columns:190px 175px minmax(0,1fr);gap:8px}.configuration-sidebar{padding:24px 8px}.configuration-sidebar nav a{padding:12px 8px}.configuration-shell main{padding:28px 12px}.configuration-shell .two-col{grid-template-columns:1fr}}
+@media(max-width:720px){.configuration-sidebar{position:static;height:auto;padding:16px;margin-top:12px;border-radius:20px}.configuration-sidebar>.eyebrow{margin:0 4px 12px}.configuration-sidebar nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.configuration-sidebar nav a{font-size:12px;padding:10px;align-items:center}.configuration-shell main{padding:26px 8px}}
+@media(prefers-reduced-transparency:reduce){.configuration-sidebar{background:#f8fbfc}}
+@media print{.configuration-sidebar{display:none}}
