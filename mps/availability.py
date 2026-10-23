@@ -198,7 +198,7 @@ def send_available(member,req,new,chosen,demo=False):
     link=current_app.config['PUBLIC_URL']+'/requests'
     intro=('This is a demonstration email, not a new request notification.\n\n' if demo else '')+title+'\n\n'+detail+'\n\nOpen Emby and search for this title to start watching.'
     body=intro+'\n\n'+(('AI-selected suggestions' if ai else 'Similar titles in your library')+'\n'+'\n'.join(r['title']+' — '+r['reason']+('\n'+r['plot'] if r.get('plot') else '') for r in suggestions)+'\n\n' if suggestions else '')+link+'\n\nManage request emails and suggestions on your Requests page.'
-    send_mail(member.email,('[DEMO] ' if demo else '')+title+' is ready on StreamingHome',body,
+    send_mail(member.email,('[DEMO] ' if demo else '')+title+' is ready on MPS',body,
         heading='Your next watch is ready.',intro=intro,action_url=current_app.config['PUBLIC_URL']+'/requests/emby',action_label='Open Emby',
         note='You received this because you requested this content. Manage availability emails and suggestions on your Requests page.' if not demo else 'Demo requested by your administrator. No request status was changed.',
         content_poster=picture,content_title=title,recommendations=suggestions,ai_recommendations=ai)

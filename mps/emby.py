@@ -20,7 +20,7 @@ def request(method, url, **kwargs):
 
 class Connect:
     base = "https://connect.emby.media/service"
-    headers = {"X-Application": "StreamingHome/0.2.0"}
+    headers = {"X-Application": "MPS/0.2.0"}
 
     def register(self, username, email, password):
         result = request("POST", self.base + "/register", headers={**self.headers, "X-CONNECT-TOKEN": "CONNECT-REGISTER"},

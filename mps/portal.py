@@ -129,7 +129,7 @@ def requests_page():
             if any(c.get('enabled') and c.get('value','').lower() in ('admin','poweruser') for c in identity.get('claims',[])):
                 abort(400,'Link a regular Ombi member account, not an administrator account.')
             member.ombi_username=identity['userName'];member.ombi_user_id=identity['id'];member.ombi_token=seal(token);db().commit()
-            flash('Ombi linked. You can now search and request here without leaving StreamingHome.','success')
+            flash('Ombi linked. You can now search and request here without leaving MPS.','success')
         elif action=='unlink':member.ombi_token='';member.ombi_username='';member.ombi_user_id='';db().commit()
         elif action=='request':
             if not member.ombi_token:abort(400,'Link your Ombi account first.')

@@ -112,7 +112,7 @@ def security():
 def qr():
     member=current_member()
     if not member or not member.mfa_pending or member.mfa_enabled:abort(404)
-    uri=pyotp.TOTP(unseal(member.mfa_pending)).provisioning_uri(name=member.email,issuer_name='StreamingHome')
+    uri=pyotp.TOTP(unseal(member.mfa_pending)).provisioning_uri(name=member.email,issuer_name='MPS')
     image=qrcode.make(uri,image_factory=qrcode.image.svg.SvgPathImage);buffer=io.BytesIO();image.save(buffer)
     return Response(buffer.getvalue(),mimetype='image/svg+xml')
 

@@ -1,0 +1,10 @@
+/* MPS identity — layout and application behaviour preserved. */
+:root{--ink:#101e36;--muted:#466078;--green:#086b78;--line:#d9e4ef;--paper:rgba(255,255,255,.92)}
+body{background:radial-gradient(ellipse at 5% 0%,#d9f7ff 0,transparent 45%),radial-gradient(ellipse at 95% 20%,#def9ed 0,transparent 42%),#f3f7fc;color:#101e36}
+h1,h2,h3{font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}h1 em{font-family:inherit;font-style:normal;color:#086b78}.eyebrow{color:#466078}
+.brand{display:flex;align-items:center;max-width:100%}.brand-logo{display:block;width:100%;height:auto}.sidebar .brand{width:210px;max-width:100%}.public-header .brand{width:280px;max-width:100%}.sidebar>.eyebrow{display:none}
+.primary,.page-heading .primary{background:#086b78;color:#fff;border-color:#086b78;box-shadow:0 5px 14px -8px #086b78}.primary:hover{background:#075461}.sidebar nav a[aria-current=page]{background:#e1f4fa;color:#075461;border-color:#b6e4ee}
+a:focus-visible,button:focus-visible{outline:3px solid #087d9b;outline-offset:4px}input:focus,select:focus,textarea:focus{outline-color:#9cdcea;border-color:#086b78}
+.card.accent{background:linear-gradient(135deg,#effaff,#effbf5)}.server-icon{background:#e2f4fa;color:#086b78}.guide-tabs a[aria-current=page]{background:#086b78}.guide-number{background:#e2f4fa;color:#086b78}
+.public-header{gap:20px}.public-header>.eyebrow{font-size:9px;letter-spacing:1px}.welcome-copy h1{letter-spacing:-.045em;line-height:1.08;font-weight:750}.welcome-copy .lede{max-width:440px}footer span{overflow-wrap:anywhere}
+@media(max-width:720px){.public-header{flex-wrap:wrap;gap:12px}.public-header .brand{width:240px}.public-header>.eyebrow{display:none}.sidebar .brand{width:220px}.welcome-copy h1{font-size:clamp(36px,10vw,48px)}}

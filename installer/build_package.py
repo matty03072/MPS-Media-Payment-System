@@ -3,7 +3,7 @@ import hashlib, json, tarfile, zipfile
 from pathlib import Path
 root=Path(__file__).resolve().parents[1]
 out=root.parent/'members-installer-dist';out.mkdir(exist_ok=True)
-allowed_dirs={'streaminghome','templates','static','installer'}
+allowed_dirs={'mps','templates','static','installer'}
 allowed_files={'app.py','serve.py','requirements.txt','README.md','TEST-REPORT.md','install-linux.sh','install-windows.ps1','uninstall-linux.sh','uninstall-windows.ps1'}
 files=[]
 for path in root.rglob('*'):

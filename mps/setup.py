@@ -20,7 +20,7 @@ def owner():
         if not auth or not secrets.compare_digest(auth.username or '', 'owner') or not secrets.compare_digest(auth.password or '', bootstrap):
             rate_limit('umbrel-bootstrap', 10)
             return Response('Use the owner credentials shown by umbrelOS.', 401,
-                            {'WWW-Authenticate': 'Basic realm="Members Portal setup"'})
+                            {'WWW-Authenticate': 'Basic realm="MPS setup"'})
     if request.method == 'POST':
         rate_limit('owner-claim', 10)
         supplied = hashlib.sha256(request.form.get('token','').encode()).hexdigest()

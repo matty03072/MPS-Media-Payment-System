@@ -2,10 +2,10 @@ import hashlib, json, tempfile, time, unittest, sys, os, uuid
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from sqlalchemy import create_engine, text, select
-from streaminghome import create_app
-from streaminghome.models import Member, Setting
-from streaminghome.core import db, put
-from streaminghome.schema import migrate
+from mps import create_app
+from mps.models import Member, Setting
+from mps.core import db, put
+from mps.schema import migrate
 from installer.configure import prepare
 
 class InstallerTests(unittest.TestCase):
@@ -57,7 +57,7 @@ class InstallerTests(unittest.TestCase):
   with self.assertRaises(RuntimeError):migrate(engine)
   engine.dispose()
  def test_worker_and_health(self):
-  from streaminghome.worker import tick
+  from mps.worker import tick
   with self.app.app_context():
    tick();self.assertGreater(float(db().get(Setting,'worker_seen').value),time.time()-30)
   self.assertEqual(self.client.get('/health').status_code,200)
@@ -78,7 +78,7 @@ class InstallerTests(unittest.TestCase):
 
  def test_mfa_required_and_guide(self):
   import pyotp
-  from streaminghome.core import unseal
+  from mps.core import unseal
   self.client.post('/setup',data=self.form())
   self.client.get('/login')
   with self.client.session_transaction() as s:csrf=s['csrf']
@@ -115,7 +115,7 @@ class InstallerTests(unittest.TestCase):
   with self.client.session_transaction() as session:session.update(uid=uid,version=version,mfa_ok=True,csrf='fixture-csrf')
  def test_readonly_connection_secret_encryption(self):
   from unittest.mock import patch,Mock
-  from streaminghome.core import unseal
+  from mps.core import unseal
   self.admin_session()
   response=Mock(status_code=200);response.json.return_value={'version':'4.0'}
   with patch('requests.get',return_value=response) as get:

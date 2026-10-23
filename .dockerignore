@@ -1,6 +1,6 @@
 *
 !requirements.txt
-!streaminghome/**
+!mps/**
 !templates/**
 !static/**
 !installer/**

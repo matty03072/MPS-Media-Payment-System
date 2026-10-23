@@ -1,10 +1,10 @@
-"""Reviewed, versioned help for the actual Members Portal screens. No account data."""
+"""Reviewed, versioned help for the actual MPS screens. No account data."""
 def guide(slug,title,category,intro,path,image,steps,note=''):
     return dict(slug=slug,title=title,category=category,intro=intro,path=path,image=image,
                 steps=[dict(title=t,text=d) for t,d in steps],note=note)
 
 MEMBER=[
-guide('join-and-sign-in','Join Members Portal and sign in','Getting started','Accept your invitation, verify your email and start using your membership.','/member','join',[
+guide('join-and-sign-in','Join MPS and sign in','Getting started','Accept your invitation, verify your email and start using your membership.','/member','join',[
 ('Open your invitation','Use the invitation link supplied by your administrator. An emailed invitation belongs to its named recipient; expired or revoked links need a replacement.'),
 ('Create your account','Choose your username and a password of 12–256 characters. Enter your email, confirm the password and agree to account creation before submitting.'),
 ('Verify your email','Open the verification email and confirm your address. If it is missing, check junk mail, then use Resend verification email on My membership.'),
@@ -54,7 +54,7 @@ guide('two-factor-authentication','Protect your account with MFA','Security','Ad
 guide('delete-account','Permanently delete your account','Accounts','Understand permanent removal before choosing it instead of cancellation.','/security','delete',[
 ('Decide whether you only want to cancel','If you only want to stop future charges, cancel renewal from My membership. Account deletion is permanent and is a different action.'),
 ('Open the deletion page','In Security & MFA, select Delete my account. Read the explanation before continuing.'),
-('Review what is removed','Removal deletes your Members Portal membership and linked Emby/Ombi accounts and cancels linked subscriptions. It does not issue a refund. Historical financial records are retained with the member profile anonymised.'),
+('Review what is removed','Removal deletes your MPS membership and linked Emby/Ombi accounts and cancels linked subscriptions. It does not issue a refund. Historical financial records are retained with the member profile anonymised.'),
 ('Confirm only if you intend to delete','Enter your current password, tick the permanent-deletion confirmation and select Permanently delete my account. Use Keep my account if you do not want to proceed.'),
 ('Wait for completion','You are signed out immediately. Unavailable services are retried, and completion email is sent after removal and cancellation finish. Your separate global Emby Connect account is not deleted.')], 'Permanent deletion cannot be undone from the portal.')
 ]
@@ -123,7 +123,7 @@ guide('revenue-and-activity','Read revenue and recent activity','Reporting','Rev
 WATCH_GUIDE=guide('watch-on-your-devices','Watch Emby on your phone, TV or computer','Watching Emby',
  'Find official downloads for Apple, Google Android, smart TVs, Windows and macOS, then sign in with Emby Connect.',
  'https://app.emby.media/','watch-emby',[
- ('Start watching in your browser','Choose Open Emby on your dashboard. It opens app.emby.media in a new tab. When Members Portal creates your Emby Connect account automatically, it uses the same email and password you chose when joining this site. On your first visit, use those details to sign in and choose your server. Existing Connect accounts keep their own sign-in details; later password changes are managed separately. A remembered Emby sign-in may take you straight back in; signing in to Members Portal alone does not sign you in to Emby.'),
+ ('Start watching in your browser','Choose Open Emby on your dashboard. It opens app.emby.media in a new tab. When MPS creates your Emby Connect account automatically, it uses the same email and password you chose when joining this site. On your first visit, use those details to sign in and choose your server. Existing Connect accounts keep their own sign-in details; later password changes are managed separately. A remembered Emby sign-in may take you straight back in; signing in to MPS alone does not sign you in to Emby.'),
  ('iPhone and iPad','Open the Apple App Store on your iPhone or iPad and search for Emby. Use the official iOS page below for the current download and requirements.'),
  ('Android phones and tablets','Open Google Play and search for Emby. The official Android page also covers the Amazon Appstore and manual downloads for compatible devices.'),
  ('Apple TV','On a supported Apple TV box, open the tvOS App Store and search for Emby. The Apple TV app built into another brand of television is not the same as an Apple TV streaming box.'),

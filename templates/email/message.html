@@ -1,29 +1,29 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{{ subject }}</title></head>
-<body style="margin:0;padding:0;background:#f4f7f5;color:#14272a;font-family:Arial,Helvetica,sans-serif;">
-<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f4f7f5;"><tr><td align="center" style="padding:28px 16px;">
+<body style="margin:0;padding:0;background:#f3f7fc;color:#14272a;font-family:Arial,Helvetica,sans-serif;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f3f7fc;"><tr><td align="center" style="padding:28px 16px;">
 <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="width:100%;max-width:600px;">
-<tr><td style="padding:18px 24px;background:#e7efe9;border-radius:14px 14px 0 0;border-bottom:4px solid #a3efc8;">
-<strong>{{ setting('site_name','Members Portal') }}</strong>
+<tr><td style="padding:18px 24px;background:#e8f2fb;border-radius:14px 14px 0 0;border-bottom:4px solid #39c8ef;">
+<img src="cid:mps-logo" width="48" height="48" alt="MPS" style="display:block;border:0;margin-bottom:12px;"><strong style="font-size:28px;color:#101e36;">MPS</strong><br><span style="font-size:12px;letter-spacing:1px;color:#466078;">MEDIA PAYMENT SYSTEM</span>
 </td></tr>
 <tr><td style="padding:34px 28px;background:#fffefa;border:1px solid #dce6df;border-top:0;border-radius:0 0 14px 14px;">
-<p style="margin:0 0 18px;font-size:11px;letter-spacing:2px;font-weight:bold;color:#0d654d;">YOUR STREAMINGHOME MEMBERSHIP</p>
-<h1 style="margin:0 0 24px;font-family:Georgia,serif;font-size:34px;line-height:1.2;font-weight:normal;color:#14272a;">{{ heading }}</h1>
+<p style="margin:0 0 18px;font-size:11px;letter-spacing:2px;font-weight:bold;color:#086b78;">YOUR MPS MEMBERSHIP</p>
+<h1 style="margin:0 0 24px;font-family:Arial,Helvetica,sans-serif;font-size:34px;line-height:1.2;font-weight:normal;color:#14272a;">{{ heading }}</h1>
 {% if content_poster %}<p style="margin:0 0 24px;text-align:center;"><img src="cid:content-poster" alt="{{ content_title }} poster" width="240" style="width:240px;max-width:100%;height:auto;border-radius:10px;"></p>{% endif %}
 {% for paragraph in paragraphs %}<p style="margin:0 0 18px;font-size:16px;line-height:1.65;white-space:pre-line;">{{ paragraph }}</p>{% endfor %}
 {% if action_url %}
-<table role="presentation" cellspacing="0" cellpadding="0" style="margin:26px 0;"><tr><td bgcolor="#0d654d" style="border-radius:7px;mso-padding-alt:16px 24px;">
-<a href="{{ action_url }}" style="display:inline-block;padding:16px 24px;border:1px solid #0d654d;border-radius:7px;color:#ffffff;text-decoration:none;font-size:16px;font-weight:bold;">{{ action_label }}</a>
+<table role="presentation" cellspacing="0" cellpadding="0" style="margin:26px 0;"><tr><td bgcolor="#086b78" style="border-radius:7px;mso-padding-alt:16px 24px;">
+<a href="{{ action_url }}" style="display:inline-block;padding:16px 24px;border:1px solid #086b78;border-radius:7px;color:#ffffff;text-decoration:none;font-size:16px;font-weight:bold;">{{ action_label }}</a>
 </td></tr></table>
 {% endif %}
-{% if recommendations %}<h2 style="font-family:Georgia,serif;font-size:25px;margin:30px 0 16px;">You might also enjoy</h2><p style="font-size:12px;color:#496355;">{{ 'AI-selected from titles in your Emby library.' if ai_recommendations else 'Similar titles in your Emby library.' }}</p>{% for recommendation in recommendations %}<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:12px;background:#edf4ed;border-left:4px solid #0d654d;"><tr>{% if recommendation.poster_cid %}<td width="88" valign="top" style="width:88px;padding:16px 0 16px 12px;"><img src="cid:{{ recommendation.poster_cid }}" alt="{{ recommendation.title }} poster" width="88" style="display:block;width:88px;max-width:100%;height:auto;border:0;border-radius:5px;"></td>{% endif %}<td valign="top" style="padding:16px 12px;overflow-wrap:anywhere;"><strong>{{ recommendation.title }}</strong>{% if recommendation.plot %}<p style="margin:8px 0 0;font-size:14px;line-height:1.6;">{{ recommendation.plot }}</p>{% endif %}<p style="margin:8px 0 0;font-size:14px;line-height:1.6;">{{ recommendation.reason }}</p></td></tr></table>{% endfor %}{% endif %}
-{% if note %}<p style="padding:16px;background:#edf4ed;border:1px solid #dce6df;border-radius:7px;font-size:13px;line-height:1.6;color:#496355;">{{ note }}</p>{% endif %}
+{% if recommendations %}<h2 style="font-family:Arial,Helvetica,sans-serif;font-size:25px;margin:30px 0 16px;">You might also enjoy</h2><p style="font-size:12px;color:#496355;">{{ 'AI-selected from titles in your Emby library.' if ai_recommendations else 'Similar titles in your Emby library.' }}</p>{% for recommendation in recommendations %}<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom:12px;background:#eaf6f8;border-left:4px solid #086b78;"><tr>{% if recommendation.poster_cid %}<td width="88" valign="top" style="width:88px;padding:16px 0 16px 12px;"><img src="cid:{{ recommendation.poster_cid }}" alt="{{ recommendation.title }} poster" width="88" style="display:block;width:88px;max-width:100%;height:auto;border:0;border-radius:5px;"></td>{% endif %}<td valign="top" style="padding:16px 12px;overflow-wrap:anywhere;"><strong>{{ recommendation.title }}</strong>{% if recommendation.plot %}<p style="margin:8px 0 0;font-size:14px;line-height:1.6;">{{ recommendation.plot }}</p>{% endif %}<p style="margin:8px 0 0;font-size:14px;line-height:1.6;">{{ recommendation.reason }}</p></td></tr></table>{% endfor %}{% endif %}
+{% if note %}<p style="padding:16px;background:#eaf6f8;border:1px solid #dce6df;border-radius:7px;font-size:13px;line-height:1.6;color:#496355;">{{ note }}</p>{% endif %}
 {% if action_url %}<p style="margin:25px 0 8px;font-size:12px;line-height:1.6;color:#496355;">Button not working? Copy and paste this link into your browser:</p>
-<p style="margin:0;font-size:12px;line-height:1.6;word-break:break-all;overflow-wrap:anywhere;"><a href="{{ action_url }}" style="color:#0d654d;text-decoration:underline;word-break:break-all;">{{ action_url }}</a></p>{% endif %}
+<p style="margin:0;font-size:12px;line-height:1.6;word-break:break-all;overflow-wrap:anywhere;"><a href="{{ action_url }}" style="color:#086b78;text-decoration:underline;word-break:break-all;">{{ action_url }}</a></p>{% endif %}
 </td></tr>
 <tr><td style="padding:24px;text-align:center;font-size:12px;line-height:1.7;color:#496355;">
-<strong style="color:#14272a;">Members Portal</strong><br>Your entertainment. One home.<br>
-<a href="{{ home_url }}" style="color:#0d654d;text-decoration:underline;">Visit your member portal</a>
+<strong style="color:#14272a;">MPS</strong><br>Media. Memberships. Payments.<br>
+<a href="{{ home_url }}" style="color:#086b78;text-decoration:underline;">Visit your member portal</a>
 <p style="margin:14px 0 0;font-size:11px;">This is an account email, not a marketing subscription.<br>Keep account setup and password reset links private.</p>
 </td></tr></table>
 </td></tr></table></body></html>

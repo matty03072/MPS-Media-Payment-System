@@ -16,9 +16,9 @@ def create_app(config=None):
     app=Flask(__name__,template_folder='../templates',static_folder='../static')
     data=Path(os.environ.get('DATA_DIR','./data')).resolve()
     app.config.update(DATA_DIR=str(data),PUBLIC_URL='http://localhost:8099',DATABASE_URL='',
-      MAX_CONTENT_LENGTH=1048576,SESSION_COOKIE_NAME='streaminghome_session',SESSION_COOKIE_HTTPONLY=True,
+      MAX_CONTENT_LENGTH=1048576,SESSION_COOKIE_NAME='mps_session',SESSION_COOKIE_HTTPONLY=True,
       SESSION_COOKIE_SAMESITE='Lax',PERMANENT_SESSION_LIFETIME=3600)
-    config_file=os.environ.get('STREAMINGHOME_CONFIG')
+    config_file=os.environ.get('MPS_CONFIG')
     if config_file:app.config.update(json.loads(Path(config_file).read_text(encoding='utf-8-sig')))
     for name in ('DATA_DIR','PUBLIC_URL','DATABASE_URL'):
         if os.environ.get(name):app.config[name]=os.environ[name]
@@ -81,7 +81,7 @@ def create_app(config=None):
     @app.get('/health')
     def health():
         with engine.connect() as conn:conn.exec_driver_sql('SELECT 1')
-        return {'status':'ok','application':'MembersPortal','version':'0.3.0','installer_version':'0.1.0','database':engine.dialect.name}
+        return {'status':'ok','application':'MPS','version':'0.3.0','installer_version':'0.1.0','database':engine.dialect.name}
     from . import auth,portal,admin,billing,management,paypal,revenue,plans,deletion,guides,availability
     for blueprint in (auth.bp,portal.bp,admin.bp,billing.bp,management.bp,paypal.bp,revenue.bp,plans.bp,deletion.bp,guides.bp,availability.bp):app.register_blueprint(blueprint)
     from .setup import bp as setup_bp

@@ -97,7 +97,7 @@ def invite():
     link=current_app.config['PUBLIC_URL']+'/join/'+token
     if email:
         try:
-            send_mail(email,'You are invited to StreamingHome',f'You are invited to {label}.\n\n{membership_text}\n\nAccept your invitation:\n{link}\n\nThis invitation expires in {days} days.\nStreamingHome', heading="You're invited.", intro='Your invitation to StreamingHome is ready. Create your account to get started. '+membership_text, action_url=link, action_label='Accept invitation', note=f'This invitation expires in {days} days. Only accept if you were expecting this invitation.')
+            send_mail(email,'You are invited to MPS',f'You are invited to {label}.\n\n{membership_text}\n\nAccept your invitation:\n{link}\n\nThis invitation expires in {days} days.\nMPS', heading="You're invited.", intro='Your invitation to MPS is ready. Create your account to get started. '+membership_text, action_url=link, action_label='Accept invitation', note=f'This invitation expires in {days} days. Only accept if you were expecting this invitation.')
             row.email_status='sent';dispatch.status='accepted_by_smtp'
         except APIError:row.email_status='failed';dispatch.status='failed';flash('Invitation saved, but email delivery failed. Check SMTP and resend.','error')
         db().commit()
@@ -130,7 +130,7 @@ def invite_action(iid,action):
         rate_limit('resend-invite',3,iid)
         link=current_app.config['PUBLIC_URL']+'/join/'+unseal(invite.encrypted_token)
         dispatch=InviteDispatch(invite_id=invite.id,actor_id=current_member().id,recipient=invite.recipient,action='resend',status='pending');db().add(dispatch);db().commit()
-        try:send_mail(invite.recipient,'Your StreamingHome invitation','Accept your invitation:\n'+link, heading="Your invitation is waiting.", intro='Join StreamingHome and bring your entertainment together in one place.', action_url=link, action_label='Accept invitation', note='This is a reminder of your existing invitation; its original expiry still applies.');invite.email_status='sent';dispatch.status='accepted_by_smtp';db().commit()
+        try:send_mail(invite.recipient,'Your MPS invitation','Accept your invitation:\n'+link, heading="Your invitation is waiting.", intro='Join MPS and bring your entertainment together in one place.', action_url=link, action_label='Accept invitation', note='This is a reminder of your existing invitation; its original expiry still applies.');invite.email_status='sent';dispatch.status='accepted_by_smtp';db().commit()
         except APIError:invite.email_status='failed';dispatch.status='failed';db().commit();raise
     else:abort(404)
     return redirect(url_for('admin.invitations'))
@@ -194,7 +194,7 @@ def settings():
 def smtp_test():
     rate_limit('smtp-test',5,current_member().id)
     try:
-        send_mail(current_member().email,'StreamingHome SMTP test','Your StreamingHome SMTP connection is working.', heading='Looking good.', intro='Your StreamingHome email connection is working. This is how your branded account emails will look.', action_url=current_app.config['PUBLIC_URL']+'/admin', action_label='Open admin dashboard', note='Test email requested from your administrator settings.')
+        send_mail(current_member().email,'MPS SMTP test','Your MPS SMTP connection is working.', heading='Looking good.', intro='Your MPS email connection is working. This is how your branded account emails will look.', action_url=current_app.config['PUBLIC_URL']+'/admin', action_label='Open admin dashboard', note='Test email requested from your administrator settings.')
         flash('SMTP server accepted the test email for your administrator address. Check your inbox and spam folder.','success')
     except APIError as error:
         flash(str(error),'error')

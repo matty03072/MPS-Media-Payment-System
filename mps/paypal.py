@@ -42,7 +42,7 @@ def api():return current_app.config.get('PAYPAL_FACTORY',PayPalAPI)()
 def publish(plan):
     existing=db().get(PayPalPlan,(plan.id,live_mode()))
     if existing:return existing
-    remote=api();product=remote.post('/v1/catalogs/products',{'name':'StreamingHome membership','type':'SERVICE','category':'SOFTWARE'},'product-streaminghome')
+    remote=api();product=remote.post('/v1/catalogs/products',{'name':'MPS membership','type':'SERVICE','category':'SOFTWARE'},'product-mps')
     result=remote.post('/v1/billing/plans',{'product_id':product['id'],'name':plan.name,'status':'ACTIVE',
       'billing_cycles':[{'frequency':{'interval_unit':'MONTH','interval_count':1},'tenure_type':'REGULAR','sequence':1,'total_cycles':0,'pricing_scheme':{'fixed_price':{'value':f'{plan.amount/100:.2f}','currency_code':plan.currency.upper()}}}],
       'payment_preferences':{'auto_bill_outstanding':False,'payment_failure_threshold':1,'setup_fee_failure_action':'CANCEL'}},plan.id)
@@ -88,7 +88,7 @@ def checkout():
             row=PayPalSubscription(member_id=member.id,plan_id=plan.id,live=live_mode());db().add(row);db().commit()
         if row.plan_id!=plan.id or row.live!=live_mode():abort(409,'A different checkout is already pending.')
         if time.time()-row.created>48*3600:abort(409,'This checkout needs administrator reconciliation before another can be created.')
-        body={'plan_id':mapping.remote_id,'custom_id':member.id,'application_context':{'brand_name':'StreamingHome','user_action':'SUBSCRIBE_NOW','shipping_preference':'NO_SHIPPING','return_url':current_app.config['PUBLIC_URL']+'/member?paypal=approved','cancel_url':current_app.config['PUBLIC_URL']+'/member?paypal=cancelled'}}
+        body={'plan_id':mapping.remote_id,'custom_id':member.id,'application_context':{'brand_name':'MPS','user_action':'SUBSCRIBE_NOW','shipping_preference':'NO_SHIPPING','return_url':current_app.config['PUBLIC_URL']+'/member?paypal=approved','cancel_url':current_app.config['PUBLIC_URL']+'/member?paypal=cancelled'}}
         if member.paid_through>time.time()+60:body['start_time']=datetime.fromtimestamp(member.paid_through,timezone.utc).isoformat().replace('+00:00','Z')
         result=remote.post('/v1/billing/subscriptions',body,row.id)
         link=next((x['href'] for x in result.get('links',[]) if x.get('rel')=='approve'),'')

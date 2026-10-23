@@ -182,10 +182,10 @@ def tick():
                     if not job.erased:erase_member(member,job)
                     if not job.email_sent:
                         try:
-                            send_mail(unseal(job.email),'Your StreamingHome account has been removed',
-                                'Your StreamingHome account and its linked Ombi and Emby server accounts have been removed. Your StreamingHome subscriptions have been cancelled.\n\nYour global Emby Connect account is not deleted by StreamingHome. Contact Emby if you also want that separate account removed.\n\nHistorical payment and administrator revenue records are retained without your member profile.',
-                                heading='Your account has been removed.',intro='Your StreamingHome membership, linked Ombi account and linked Emby server accounts have been removed. Your StreamingHome subscriptions have been cancelled.',
-                                note='Your separate global Emby Connect account is not deleted by StreamingHome. Historical payment and administrator revenue records are retained without your member profile.')
+                            send_mail(unseal(job.email),'Your MPS account has been removed',
+                                'Your MPS account and its linked Ombi and Emby server accounts have been removed. Your MPS subscriptions have been cancelled.\n\nYour global Emby Connect account is not deleted by MPS. Contact Emby if you also want that separate account removed.\n\nHistorical payment and administrator revenue records are retained without your member profile.',
+                                heading='Your account has been removed.',intro='Your MPS membership, linked Ombi account and linked Emby server accounts have been removed. Your MPS subscriptions have been cancelled.',
+                                note='Your separate global Emby Connect account is not deleted by MPS. Historical payment and administrator revenue records are retained without your member profile.')
                             job.email_sent=True;job.email='';db().commit()
                         except APIError:errors.append('Removal completed; confirmation email is awaiting SMTP retry.')
                 job.state='done' if job.erased and job.email_sent else 'retry'

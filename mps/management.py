@@ -23,7 +23,7 @@ def activation(member):
     link=current_app.config['PUBLIC_URL']+'/activate/'+token
     sent=False
     if request.form.get('send_email')=='yes':
-        try:send_mail(member.email,'Set up your StreamingHome account','Set your password using this single-use link within 24 hours:\n'+link+'\nAdministrator accounts must then enrol MFA.', heading='Make yourself at home.', intro='Your StreamingHome account is ready to set up. Choose your password to get started.', action_url=link, action_label='Set up your account', note='This single-use link expires in 24 hours. Administrator accounts must also set up multi-factor authentication.');sent=True
+        try:send_mail(member.email,'Set up your MPS account','Set your password using this single-use link within 24 hours:\n'+link+'\nAdministrator accounts must then enrol MFA.', heading='Make yourself at home.', intro='Your MPS account is ready to set up. Choose your password to get started.', action_url=link, action_label='Set up your account', note='This single-use link expires in 24 hours. Administrator accounts must also set up multi-factor authentication.');sent=True
         except APIError:flash('Account and setup link saved, but email delivery failed. Share the link privately or configure SMTP.','error')
     return render_template('activation_created.html',member=member,link=link,sent=sent)
 

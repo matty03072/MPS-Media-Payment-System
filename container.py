@@ -11,7 +11,7 @@ def initialize():
     password = os.environ.get('UMBREL_BOOTSTRAP_PASSWORD', '')
     if len(password) < 32:
         raise RuntimeError('Umbrel bootstrap password is missing or too short')
-    config = Path(os.environ.get('STREAMINGHOME_CONFIG', '/state/config.json'))
+    config = Path(os.environ.get('MPS_CONFIG', '/state/config.json'))
     config.parent.mkdir(parents=True, exist_ok=True)
     with (config.parent / '.initialize.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)

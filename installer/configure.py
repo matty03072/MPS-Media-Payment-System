@@ -4,10 +4,10 @@ from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from sqlalchemy import create_engine, text, select
 from sqlalchemy.engine import URL
-from streaminghome import create_app
-from streaminghome.schema import migrate
-from streaminghome.core import db, put
-from streaminghome.models import Member
+from mps import create_app
+from mps.schema import migrate
+from mps.core import db, put
+from mps.models import Member
 
 def write_private(path, content):
     path=Path(path);path.parent.mkdir(parents=True,exist_ok=True)

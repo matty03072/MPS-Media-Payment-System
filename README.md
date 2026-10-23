@@ -1,8 +1,12 @@
-# Members Portal — umbrelOS Preview
+![MPS — Media Payment System](static/mps-logo.svg)
+
+# MPS — Media Payment System
+
+umbrelOS Preview
 
 Test build published by matty03072. This is not an official Umbrel App Store release.
 
-A self-hosted media membership portal with optional Emby, Ombi, SMTP and billing
+MPS is a self-hosted media membership and payment portal with optional Emby, Ombi, SMTP and billing
 integrations. Use test accounts only; no service is configured automatically.
 
 Community test store: https://github.com/matty03072/members-portal-preview-store
@@ -25,3 +29,5 @@ Images target linux/amd64 and linux/arm64. Configuration, database and encryptio
 keys persist together in `/state`. Back up this entire directory, not just SQLite.
 No open-source licence has been selected; publication does not grant an additional
 licence. Third-party dependencies retain their own licences.
+
+Brand assets and colour specifications: [BRAND.md](BRAND.md). Existing app IDs and repository URLs stay stable so preview updates preserve data.

@@ -4,7 +4,7 @@ import os
 import unittest
 from unittest.mock import patch
 from installer.test_installation import InstallerTests
-from streaminghome.core import db, put
+from mps.core import db, put
 
 
 class UmbrelTests(unittest.TestCase):

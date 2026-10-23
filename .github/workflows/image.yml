@@ -10,6 +10,8 @@ jobs:
   image:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
@@ -30,14 +32,7 @@ jobs:
           tags: ${{ env.IMAGE }}:${{ github.ref_name }}
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
-            org.opencontainers.image.description=Members Portal umbrelOS test preview
-      - name: Verify both architectures
-        env:
-          IMAGE_DIGEST: ${{ steps.build.outputs.digest }}
-        run: |
-          bash container-smoke.sh "$IMAGE@$IMAGE_DIGEST" linux/amd64
-          docker image rm "$IMAGE@$IMAGE_DIGEST"
-          bash container-smoke.sh "$IMAGE@$IMAGE_DIGEST" linux/arm64
+            org.opencontainers.image.description=MPS umbrelOS test preview
       - name: Record verified digest
         env:
           IMAGE_DIGEST: ${{ steps.build.outputs.digest }}
@@ -48,3 +43,21 @@ jobs:
         with:
           name: verified-image-digest
           path: image-digest.txt
+  verify:
+    needs: image
+    strategy:
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            platform: linux/amd64
+          - runner: ubuntu-24.04-arm
+            platform: linux/arm64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify published container
+        env:
+          IMAGE_DIGEST: ${{ needs.image.outputs.digest }}
+          PREVIEW_PLATFORM: ${{ matrix.platform }}
+        run: bash container-smoke.sh "ghcr.io/${GITHUB_REPOSITORY,,}@$IMAGE_DIGEST" "$PREVIEW_PLATFORM"

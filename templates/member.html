@@ -1,5 +1,5 @@
 {% extends 'base.html' %}{% block content %}
-<header class="page-heading"><div><p class="eyebrow">YOUR STREAMINGHOME</p><h1>Welcome back,<br><em>{{ member.username }}.</em></h1><p class="muted">Your membership and your requests.</p></div>{% if entitled(member) %}<a class="button primary" href="/requests">Discover & request ↗</a>{% endif %}</header>{% include 'emby_launch.html' %}
+<header class="page-heading"><div><p class="eyebrow">YOUR MPS</p><h1>Welcome back,<br><em>{{ member.username }}.</em></h1><p class="muted">Your membership and your requests.</p></div>{% if entitled(member) %}<a class="button primary" href="/requests">Discover & request ↗</a>{% endif %}</header>{% include 'emby_launch.html' %}
 {% if not member.verified %}<div class="notice"><h3>Check your email</h3><p>Verify your email to enable streaming and payment setup.</p><form action="/verify/resend" method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="ghost">Resend verification email</button></form></div>{% endif %}
 <section class="card" id="membership"><p class="eyebrow">MY MEMBERSHIP</p><h2>{{ membership_status }}</h2>
 {% if not member.requires_payment %}<p>Your account is on the house. No subscription or payment is required.</p>

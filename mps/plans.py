@@ -79,7 +79,7 @@ def tick():
                 from .billing import api
                 if not plan.stripe_price:
                     if not setting('stripe_secret',secret=True):raise APIError('Configure Stripe credentials before publishing this plan.')
-                    result=api().post('/prices',{'unit_amount':str(plan.amount),'currency':plan.currency,'recurring[interval]':'month','product_data[name]':'StreamingHome · '+plan.name,'metadata[plan_id]':plan.id},'plan-'+plan.id)
+                    result=api().post('/prices',{'unit_amount':str(plan.amount),'currency':plan.currency,'recurring[interval]':'month','product_data[name]':'MPS · '+plan.name,'metadata[plan_id]':plan.id},'plan-'+plan.id)
                     plan.stripe_price=result['id']
             elif job.provider=='paypal':
                 from .paypal import publish

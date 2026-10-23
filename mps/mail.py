@@ -8,7 +8,7 @@ from .core import db,setting,digest
 from .models import OneTimeToken
 from .emby import APIError
 
-def build_message(to, sender, subject, body, *, heading=None, intro=None, action_url=None, action_label='Open StreamingHome', note=None, content_poster=None, content_title='', recommendations=None, ai_recommendations=False):
+def build_message(to, sender, subject, body, *, heading=None, intro=None, action_url=None, action_label='Open MPS', note=None, content_poster=None, content_title='', recommendations=None, ai_recommendations=False):
     if any('\n' in x or '\r' in x for x in (to,sender,subject)):
         raise APIError('Invalid email header.')
     if action_url and (urlsplit(action_url).scheme not in ('https','http') or urlsplit(action_url).netloc != urlsplit(current_app.config['PUBLIC_URL']).netloc):
@@ -17,12 +17,15 @@ def build_message(to, sender, subject, body, *, heading=None, intro=None, action
     for index,rec in enumerate(recommendations):
         rec['poster_cid']=f'recommendation-poster-{index+1}' if rec.get('poster') else None
     msg=EmailMessage()
-    msg['From']=formataddr((setting('site_name','Members Portal'),sender));msg['To']=to;msg['Subject']=subject
+    msg['From']=formataddr(('MPS — Media Payment System',sender));msg['To']=to;msg['Subject']=subject
     msg.set_content(body)
     html=current_app.jinja_env.get_template('email/message.html').render(subject=subject,heading=heading or subject,
         paragraphs=(intro if intro is not None else body).split('\n\n'),action_url=action_url,
         action_label=action_label,note=note,home_url=current_app.config['PUBLIC_URL'], content_poster=bool(content_poster), content_title=content_title, recommendations=recommendations or [], ai_recommendations=ai_recommendations)
     msg.add_alternative(html,subtype='html')
+    from pathlib import Path
+    logo=(Path(current_app.static_folder)/'mps-icon.png').read_bytes()
+    msg.get_payload()[-1].add_related(logo,maintype='image',subtype='png',cid='<mps-logo>',disposition='inline',filename='mps-logo.png')
     if content_poster:
         data,subtype=content_poster
         if subtype not in ('jpeg','png') or len(data)>2_000_000:raise APIError('Invalid content poster.')
@@ -64,5 +67,5 @@ def token_email(member,purpose):
     token=secrets.token_urlsafe(32)
     db().add(OneTimeToken(digest=digest(token),member_id=member.id,purpose=purpose,expires=time.time()+1800));db().commit()
     link=current_app.config['PUBLIC_URL']+('/verify/' if purpose=='verify' else '/reset/')+token
-    subject='Verify your members portal email' if purpose=='verify' else 'Reset your members portal password'
-    send_mail(member.email,subject,f'{subject}\n\nOpen this link within 30 minutes:\n{link}\n\nIf you did not request this, ignore this email.\nStreamingHome', heading='Welcome home.' if purpose=='verify' else 'Reset your password.', intro='Confirm your email address to continue setting up your members portal account.' if purpose=='verify' else 'We received a request to reset your members portal password.', action_url=link, action_label='Verify email address' if purpose=='verify' else 'Reset password', note='This link expires in 30 minutes. If you did not request this email, you can ignore it.')
+    subject='Verify your MPS email' if purpose=='verify' else 'Reset your MPS password'
+    send_mail(member.email,subject,f'{subject}\n\nOpen this link within 30 minutes:\n{link}\n\nIf you did not request this, ignore this email.\nMPS', heading='Welcome home.' if purpose=='verify' else 'Reset your password.', intro='Confirm your email address to continue setting up your MPS account.' if purpose=='verify' else 'We received a request to reset your MPS password.', action_url=link, action_label='Verify email address' if purpose=='verify' else 'Reset password', note='This link expires in 30 minutes. If you did not request this email, you can ignore it.')
