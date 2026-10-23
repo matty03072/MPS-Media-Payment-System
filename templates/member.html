@@ -1,0 +1,33 @@
+{% extends 'base.html' %}{% block content %}
+<header class="page-heading"><div><p class="eyebrow">YOUR STREAMINGHOME</p><h1>Welcome back,<br><em>{{ member.username }}.</em></h1><p class="muted">Your membership and your requests.</p></div>{% if entitled(member) %}<a class="button primary" href="/requests">Discover & request ↗</a>{% endif %}</header>{% include 'emby_launch.html' %}
+{% if not member.verified %}<div class="notice"><h3>Check your email</h3><p>Verify your email to enable streaming and payment setup.</p><form action="/verify/resend" method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="ghost">Resend verification email</button></form></div>{% endif %}
+<section class="card" id="membership"><p class="eyebrow">MY MEMBERSHIP</p><h2>{{ membership_status }}</h2>
+{% if not member.requires_payment %}<p>Your account is on the house. No subscription or payment is required.</p>
+{% else %}
+{% if assigned_plan %}<p>{{ assigned_plan.name }} · <strong>{{ assigned_plan.amount|money }} / month</strong></p>{% endif %}
+{% if member.paid_through %}<p>{{ 'Access remains active until' if entitled(member) else 'Last paid-through date' }}: <strong>{{ member.paid_through|date }}</strong></p>{% endif %}
+{% if payment_failed %}<p>Your payment was unsuccessful. Automatic collection has stopped. Use the payment options below to restart your subscription.</p>{% elif membership_status != 'Active' %}<p>Your subscription payment needs to be completed before streaming access is enabled.</p>{% endif %}
+{% if member.cancel_pending and not payment_failed %}<p>Renewal is cancelled. Any remaining paid access stays available until the date above.</p>{% endif %}
+{% if membership_status == 'Active' and not member.cancel_pending %}
+{% if member.stripe_subscription %}<form action="/billing/cancel" method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="ghost">Cancel subscription</button></form>{% endif %}
+{% if paypal_subscription and paypal_subscription.status == 'ACTIVE' %}<form action="/billing/paypal/cancel" method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="ghost">Cancel subscription</button></form>{% endif %}
+<p class="fine">Cancelling stops future renewals. Your access continues for the time already paid for.</p>
+{% endif %}
+{% if member.stripe_customer %}<form action="/billing/portal" method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="ghost">{% if membership_status != 'Active' and not payment_failed and member.stripe_subscription %}Complete payment / billing details{% else %}Billing details & invoices{% endif %} ↗</button></form>{% endif %}
+{% if member.verified and membership_status != 'Active' %}
+{% if paypal_subscription and paypal_subscription.status not in ['APPROVAL_PENDING','CREATING'] %}<p>Your PayPal subscription is awaiting payment confirmation. <a href="https://www.paypal.com/myaccount/autopay/">Manage payment in PayPal</a>.</p>
+{% elif member.stripe_subscription and not payment_failed and member.billing_status not in ['canceled','incomplete_expired'] %}<p>Use the billing button above to complete payment. If you have just paid, refresh this page shortly.</p>
+{% else %}
+{% for plan in plans %}<div class="plan"><h3>{{ plan.name }}</h3><p>{{ plan.amount|money }} / month</p>
+{% if plan.stripe_price and setting('billing_enabled','0')=='1' and not paypal_subscription %}<form action="/billing/checkout" method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="plan_id" value="{{ plan.id }}"><button class="primary">{{ 'Retry payment' if payment_failed else 'Pay subscription' }} with Stripe ↗</button></form>{% endif %}
+{% if plan.id in paypal_plans and setting('paypal_enabled','0')=='1' and (not member.checkout_id or payment_failed) %}<form action="/billing/paypal/checkout" method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="plan_id" value="{{ plan.id }}"><button class="primary">{{ 'Retry payment' if payment_failed else 'Pay subscription' }} with PayPal ↗</button></form>{% endif %}
+{% if not ((plan.stripe_price and setting('billing_enabled','0')=='1') or (plan.id in paypal_plans and setting('paypal_enabled','0')=='1')) %}<p>Payment is not available for this plan yet. Please contact your administrator.</p>{% endif %}
+</div>{% else %}<p>No payment plan is available yet. Please contact your administrator.</p>{% endfor %}
+{% endif %}{% endif %}{% endif %}</section>
+<section class="card" id="my-requests"><p class="eyebrow">YOUR WATCHLIST</p><h2>My movie & TV requests</h2>
+{% if history_error %}<p role="status">Your request history is temporarily unavailable. Your membership details are still available above. Refresh this page to try again.</p>
+{% elif not member.ombi_user_id or not member.ombi_token %}<p>Your requests will appear here once your requests account is linked.</p><a href="/linked-accounts">View linked accounts</a>
+{% elif request_history %}<div class="table-wrap"><table><thead><tr><th>Title</th><th>Type</th><th>Status</th><th>Requested</th></tr></thead><tbody>{% for item in request_history %}<tr><td data-label="Title">{{ item.title }}{% if item.detail %}<small>{{ item.detail }}</small>{% endif %}</td><td data-label="Type">{{ item.kind }}</td><td data-label="Status">{{ item.status }}</td><td data-label="Requested">{{ item.date or '—' }}</td></tr>{% endfor %}</tbody></table></div><p class="fine">Approved requests are queued or processing. Ombi marks them available once they are ready to watch; live download progress is not supplied.</p>
+{% else %}<p>You haven’t requested any movies or TV shows yet.</p>{% endif %}
+{% if entitled(member) %}<a class="button ghost" href="/requests">Discover & request</a>{% endif %}</section>
+{% endblock %}

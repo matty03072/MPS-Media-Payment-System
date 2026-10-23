@@ -1,0 +1,11 @@
+*
+!requirements.txt
+!streaminghome/**
+!templates/**
+!static/**
+!installer/**
+!app.py
+!serve.py
+!container.py
+**/__pycache__
+**/*.pyc

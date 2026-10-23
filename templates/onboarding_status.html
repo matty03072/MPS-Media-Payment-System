@@ -1,0 +1,10 @@
+{% set setup = onboarding_status(member) %}
+<section class="card"><h2>Your connected accounts</h2>
+{% if setup and setup.state == 'done' %}<p>Your Emby and Ombi accounts are linked. Use the details you chose when you joined.</p>
+{% elif not member.verified %}<p>Verify your email to start automatic setup. You do not need to enter separate Emby or Ombi credentials.</p>
+{% elif not setup or setup.state == 'signin_required' %}<p>Sign out and sign back in to Members Portal once so we can finish creating and linking your accounts using your sign-in details. No separate service credentials are needed.</p>
+{% elif setup.error %}<p>Some account links need administrator attention. Accounts shown as enabled below can be used with the username and password you chose when joining. You do not need to create or link another account.</p>
+{% else %}<p>Your accounts are being created and linked automatically. Refresh this page shortly.</p>{% endif %}
+{% if setup and setup.ombi_state == 'waiting_payment' %}<p>Your request account will be enabled after your monthly payment is confirmed.</p>{% endif %}
+{% if setup and me and me.admin %}<p>Setup: {{ setup.state }} · Connect: {{ setup.connect_state }} · Ombi: {{ setup.ombi_state }}</p>{% if setup.error %}<p class="error">{{ setup.error }}</p>{% endif %}{% endif %}
+<p class="fine">Automatically created Emby Connect accounts use the same email and password you chose when joining this site. Existing Connect accounts keep their own details; later password changes are managed separately. Emby may send its own verification email. Any pending server links are shown on your Linked accounts page.</p></section>

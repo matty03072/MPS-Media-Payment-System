@@ -1,0 +1,12 @@
+<section class="card"><h2>Request availability emails</h2><p>Notify the requester when their movie or requested episodes are playable in their Emby libraries. Existing additions are recorded silently during setup.</p>
+<p class="fine">{{ setting('availability_status','Not checked yet.') }} Last completed: {{ setting('availability_completed','0')|float|date }}</p>
+<form method="post" action="/admin/availability/settings"><input type="hidden" name="csrf" value="{{ csrf }}">
+<label class="check"><input type="checkbox" name="enabled" value="yes" {% if setting('availability_enabled')=='1' %}checked{% endif %}>Send branded availability emails</label>
+<label>Similar-title suggestions<select name="provider"><option value="off" {% if setting('availability_ai_provider','off')=='off' %}selected{% endif %}>Emby similarity (no AI)</option><option value="ollama" {% if setting('availability_ai_provider')=='ollama' %}selected{% endif %}>Local AI — Ollama</option><option value="compatible" {% if setting('availability_ai_provider')=='compatible' %}selected{% endif %}>OpenAI-compatible API</option></select></label>
+<label>AI service URL<input type="url" name="ai_url" value="{{ setting('availability_ai_url') }}" placeholder="http://local-ai:11434 or https://api.example.com/v1"></label>
+<label>Model name<input name="model" value="{{ setting('availability_ai_model') }}" maxlength="120"></label>
+<label>API key (optional for local AI)<input name="ai_key" type="password" autocomplete="new-password"></label>
+<p class="fine">AI receives title metadata only, never member names, email addresses or credentials. Suggestions are restricted to the member’s accessible library. If AI is unavailable, emails use Emby similarity and label it accordingly. Leave the key blank to keep the saved value.</p><button class="primary">Save request email settings</button></form>
+<form method="post" action="/admin/availability/demo"><input type="hidden" name="csrf" value="{{ csrf }}"><button class="ghost">Send demo to my admin email</button></form>
+<p class="fine">Checks run every five minutes. Delivery records distinguish SMTP acceptance from inbox delivery. Uncertain submissions require administrator review and are not automatically resent.</p>
+</section>
