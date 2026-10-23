@@ -153,6 +153,7 @@ def invite_action(iid,action):
 @admin_required
 def settings(category=None):
     categories = {
+        'branding': ('Branding', 'Personalise your site and outgoing emails.'),
         'emby': ('Emby servers', 'Connect your servers and refresh their libraries.'),
         'services': ('Connected services', 'Track requests through download, import and Emby availability.'),
         'smtp': ('SMTP settings', 'Manage outgoing email and request availability notifications.'),
@@ -165,7 +166,10 @@ def settings(category=None):
         return redirect(url_for('admin.settings', category='emby'))
     if request.method=='POST':
         section=request.form.get('section')
-        if section=='smtp':
+        if section=='branding':
+            from .branding import save_branding
+            save_branding()
+        elif section=='smtp':
             host=request.form.get('smtp_host','').strip();sender=request.form.get('smtp_from','').strip();mode=request.form.get('smtp_mode')
             try:port=int(request.form.get('smtp_port','587'))
             except ValueError:abort(400,'Invalid SMTP port.')
@@ -210,8 +214,8 @@ def settings(category=None):
             put('ombi_url',url);put('ombi_create','1' if request.form.get('ombi_create')=='yes' else '0')
             if request.form.get('ombi_key'):put('ombi_key',request.form['ombi_key'].strip(),secret=True)
         else:abort(400,'Unknown settings section.')
-        audit('Updated '+section+' configuration');db().commit();flash('Configuration saved. Secret values are not displayed.','success')
-        return redirect(url_for('admin.settings',category={'stripe':'payments','paypal':'payments','smtp':'smtp','ombi':'ombi'}[section]))
+        audit('Updated '+section+' configuration');db().commit();flash('Branding saved.' if section=='branding' else 'Configuration saved. Secret values are not displayed.','success')
+        return redirect(url_for('admin.settings',category={'branding':'branding','stripe':'payments','paypal':'payments','smtp':'smtp','ombi':'ombi'}[section]))
     return render_template('settings.html',settings_page=category,settings_title=categories[category][0],settings_description=categories[category][1],servers=db().scalars(select(Server).order_by(Server.name)).all())
 
 @bp.post('/smtp/test')

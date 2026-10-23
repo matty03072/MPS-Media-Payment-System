@@ -58,6 +58,12 @@ Optional Emby scans are deduplicated and triggered only after import evidence, f
 
 Configuration is organised into separate Emby, connected-service, SMTP, payment, Ombi and system pages. Emby server details can be edited and libraries rescanned without automatically changing existing member access.
 
+## Your branding
+
+Open **Configuration → Branding** to set your site name and upload a PNG, JPEG or WebP logo (up to 500 KB). Changes apply immediately to the site and newly sent emails, including the sender display name. Branding persists with your installation data. Site and email footers show your identity alongside a linked **MPS — Media Payment System** credit. The SMTP sending address remains the address configured under SMTP settings.
+
+![Custom branding configuration](docs/screenshots/branding-settings.png)
+
 ## From invitation to access
 
 1. **Invite:** an administrator selects the member's Emby servers, libraries, optional Live TV access and membership plan.

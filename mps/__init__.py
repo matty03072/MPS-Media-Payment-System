@@ -64,10 +64,12 @@ def create_app(config=None):
           'Content-Security-Policy':"default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; form-action 'self' https://checkout.stripe.com https://billing.stripe.com https://www.paypal.com https://www.sandbox.paypal.com; base-uri 'none'; frame-ancestors 'none'"})
         if app.config['SESSION_COOKIE_SECURE']:response.headers['Strict-Transport-Security']='max-age=31536000'
         return response
+    from .branding import identity, bp as branding_bp
+    app.register_blueprint(branding_bp)
     from .onboarding import status as onboarding_status
     app.jinja_env.globals['onboarding_status']=onboarding_status
     @app.context_processor
-    def context():return {'me':current_member(),'csrf':session.get('csrf',''),'setting':setting,'entitled':entitled,'now':time.time(),'json_load':json.loads,'public_url':app.config['PUBLIC_URL']}
+    def context():return {**identity(),'me':current_member(),'csrf':session.get('csrf',''),'setting':setting,'entitled':entitled,'now':time.time(),'json_load':json.loads,'public_url':app.config['PUBLIC_URL']}
     @app.template_filter('date')
     def date(value):return datetime.fromtimestamp(value,timezone.utc).strftime('%d %b %Y · %H:%M UTC') if value else '—'
     @app.template_filter('money')

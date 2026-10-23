@@ -13,18 +13,21 @@ def build_message(to, sender, subject, body, *, heading=None, intro=None, action
         raise APIError('Invalid email header.')
     if action_url and (urlsplit(action_url).scheme not in ('https','http') or urlsplit(action_url).netloc != urlsplit(current_app.config['PUBLIC_URL']).netloc):
         raise APIError('Invalid account email link.')
+    from .branding import identity, logo_bytes, brand_text
+    brand = identity()
+    subject, body, heading, intro, action_label, note = map(brand_text, (subject, body, heading, intro, action_label, note))
     recommendations=[dict(r) for r in (recommendations or [])[:3]]
     for index,rec in enumerate(recommendations):
         rec['poster_cid']=f'recommendation-poster-{index+1}' if rec.get('poster') else None
     msg=EmailMessage()
-    msg['From']=formataddr(('MPS — Media Payment System',sender));msg['To']=to;msg['Subject']=subject
-    msg.set_content(body)
-    html=current_app.jinja_env.get_template('email/message.html').render(subject=subject,heading=heading or subject,
+    msg['From']=formataddr((brand['site_name'],sender));msg['To']=to;msg['Subject']=subject
+    msg.set_content(body + '\n\n' + brand['site_name'] + '\nPowered by MPS — Media Payment System\n' + brand['project_url'])
+    html=current_app.jinja_env.get_template('email/message.html').render(**brand,subject=subject,heading=heading or subject,
         paragraphs=(intro if intro is not None else body).split('\n\n'),action_url=action_url,
         action_label=action_label,note=note,home_url=current_app.config['PUBLIC_URL'], content_poster=bool(content_poster), content_title=content_title, recommendations=recommendations or [], ai_recommendations=ai_recommendations)
     msg.add_alternative(html,subtype='html')
     from pathlib import Path
-    logo=(Path(current_app.static_folder)/'mps-icon.png').read_bytes()
+    logo=logo_bytes()
     msg.get_payload()[-1].add_related(logo,maintype='image',subtype='png',cid='<mps-logo>',disposition='inline',filename='mps-logo.png')
     if content_poster:
         data,subtype=content_poster

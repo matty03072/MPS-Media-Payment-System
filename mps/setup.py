@@ -31,7 +31,7 @@ def owner():
         username=request.form.get('username','').strip()
         password=request.form.get('password','')
         name=request.form.get('site_name','').strip()
-        if not valid_password(password) or not username_valid(username) or '@' not in email or len(email)>254 or not 1<=len(name)<=80:
+        if not valid_password(password) or not username_valid(username) or '@' not in email or len(email)>254 or not 1<=len(name)<=80 or any(ord(c)<32 or ord(c)==127 for c in name):
             abort(400,'Enter a site name, valid email, username, and a password of at least 12 characters.')
         claimed=db().execute(update(Setting).where(Setting.key=='setup_token_hash',Setting.value==stored).values(value='')).rowcount
         if claimed != 1:
