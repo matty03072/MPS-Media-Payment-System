@@ -109,4 +109,9 @@ Images target `linux/amd64` and `linux/arm64`. Configuration, database and encry
 
 Brand assets and colour specifications: [BRAND.md](BRAND.md). Existing app IDs and repository URLs stay stable so preview updates preserve data.
 
-No open-source licence has been selected; publication does not grant an additional licence. Third-party dependencies retain their own licences.
+## Licence
+
+MPS — Media Payment System is licensed under the [MIT License](LICENSE).
+Copyright (c) 2026 matty03072.
+
+Third-party dependencies retain their own licences.

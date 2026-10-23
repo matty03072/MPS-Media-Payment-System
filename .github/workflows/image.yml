@@ -32,6 +32,7 @@ jobs:
           tags: ${{ env.IMAGE }}:${{ github.ref_name }}
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.licenses=MIT
             org.opencontainers.image.description=MPS umbrelOS test preview
       - name: Record verified digest
         env:
