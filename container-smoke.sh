@@ -2,7 +2,7 @@
 set -euo pipefail
 image="$1"
 platform="$2"
-docker run --rm --platform "$platform" --entrypoint python "$image" -m unittest installer.test_installation installer.test_umbrel.UmbrelTests -q
+docker run --rm --platform "$platform" --env STREAMINGHOME_CONFIG= --entrypoint python "$image" -m unittest installer.test_installation installer.test_umbrel.UmbrelTests -q
 state=$(mktemp -d)
 sudo chown 1000:1000 "$state"
 export UMBREL_BOOTSTRAP_PASSWORD
