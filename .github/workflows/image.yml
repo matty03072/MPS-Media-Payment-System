@@ -36,6 +36,7 @@ jobs:
           IMAGE_DIGEST: ${{ steps.build.outputs.digest }}
         run: |
           bash container-smoke.sh "$IMAGE@$IMAGE_DIGEST" linux/amd64
+          docker image rm "$IMAGE@$IMAGE_DIGEST"
           bash container-smoke.sh "$IMAGE@$IMAGE_DIGEST" linux/arm64
       - name: Record verified digest
         env:

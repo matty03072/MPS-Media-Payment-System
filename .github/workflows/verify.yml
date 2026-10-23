@@ -1,0 +1,27 @@
+name: Verify published preview
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: Published image with immutable digest
+        required: true
+permissions:
+  contents: read
+jobs:
+  verify:
+    strategy:
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            platform: linux/amd64
+          - runner: ubuntu-24.04-arm
+            platform: linux/arm64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Container acceptance and restart checks
+        env:
+          PREVIEW_IMAGE: ${{ inputs.image }}
+          PREVIEW_PLATFORM: ${{ matrix.platform }}
+        run: bash container-smoke.sh "$PREVIEW_IMAGE" "$PREVIEW_PLATFORM"
