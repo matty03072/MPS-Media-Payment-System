@@ -22,7 +22,7 @@ Captured from the running application with temporary MPS branding applied in the
 
 ### Member request statuses
 
-![MPS member request statuses](docs/screenshots/member-request-status.png)
+![MPS member request statuses](docs/screenshots/member-request-status-redacted-v2.png)
 
 ## Automated account creation
 
@@ -80,7 +80,7 @@ Configuration is organised into separate Emby, connected-service, SMTP, payment,
 
 This is a **community test preview**, published by matty03072—not an official Umbrel App Store release.
 
-Add the [MPS community store](https://github.com/matty03072/members-portal-preview-store) to umbrelOS, then install **MPS (Preview)**. Existing preview users should update the installed app rather than uninstall it.
+Add the [MPS community store](https://github.com/matty03072/MPS-Media-Payment-System-Store) to umbrelOS, then install **MPS (Preview)**. Existing preview users should update the installed app rather than uninstall it.
 
 On first launch, unlock `/setup` with username `owner` and the password shown by Umbrel, create your permanent owner account and enrol MFA.
 
