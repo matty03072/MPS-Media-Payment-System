@@ -8,6 +8,22 @@ MPS is a self-hosted application that brings **Emby, Emby Connect, Ombi, Sonarr,
 
 Members can manage their membership, open Emby, discover and request content through Ombi, and manage their account security. Administrators can invite members, choose their servers and libraries, configure plans, monitor account setup and track revenue from the same application.
 
+## Screenshots
+
+Captured from the running application with temporary MPS branding applied in the browser. Names and email addresses were removed before blurring; no production configuration or account data is bundled with the preview. These images illustrate the interface, not preconfigured integrations.
+
+### Administrator overview
+
+![MPS administrator overview](docs/screenshots/admin-overview.png)
+
+### Member dashboard
+
+![MPS member dashboard with identity obscured](docs/screenshots/member-dashboard.png)
+
+### Member request statuses
+
+![MPS member request statuses](docs/screenshots/member-request-status.png)
+
 ## Automated account creation
 
 Once the administrator has connected the services, an invited member signs up through MPS with their email, username and password. After email verification, the background worker coordinates account setup:
