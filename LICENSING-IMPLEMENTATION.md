@@ -1,6 +1,6 @@
 # MPS licensing implementation
 
-Status: owner licence service deployed; beta.6 client release includes application licensing.
+Status: owner licence service deployed; 1.0.0 client release includes application licensing.
 
 ## Requested outcome
 

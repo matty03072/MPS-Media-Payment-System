@@ -71,7 +71,7 @@ all enabled members' MPS access. Review these changes before upgrading.
 
 ## Release verification
 
-Version 0.1.0-beta.6 is the licensing release. Automated tests
+Version 1.0.0 is the licensing release. Automated tests
 cover signatures, invalid/test/expired leases, member boundaries, MFA/CSRF,
 webhook replay, email retries and registration limits. On 24 October 2026, an isolated Stripe sandbox purchase verified genuine network
 webhook delivery/signatures, automatic issuance, inbox receipt and activation.

@@ -134,7 +134,7 @@ registration does not cancel the subscription; billing is managed separately.
 
 ### Application licensing
 
-Version 0.1.0-beta.6 introduces the application licensing terms below.
+Version 1.0.0 introduces the application licensing terms below.
 The licence site is https://members.streaminghome.app/mps. The client includes
 only its HTTPS origin and public verification key, never server credentials.
 See [application licensing](docs/APPLICATION-LICENSING.md) for activation,

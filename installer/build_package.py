@@ -1,7 +1,8 @@
 """Release allowlist: excludes workspace state, customer data and test evidence."""
-import hashlib, json, tarfile, zipfile
+import hashlib, json, tarfile, zipfile, runpy
 from pathlib import Path
 root=Path(__file__).resolve().parents[1]
+version=runpy.run_path(str(root/'mps/version.py'))['VERSION']
 out=root.parent/'members-installer-dist';out.mkdir(exist_ok=True)
 allowed_dirs={'mps','templates','static','installer'}
 allowed_files={'app.py','serve.py','requirements.txt','README.md','TEST-REPORT.md','install-linux.sh','install-windows.ps1','uninstall-linux.sh','uninstall-windows.ps1'}
@@ -14,11 +15,11 @@ for path in root.rglob('*'):
  files.append(path)
 manifest={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(files)}
 manifest_bytes=(json.dumps(manifest,indent=2)+'\n').encode()
-with zipfile.ZipFile(out/'members-portal-0.1.0-windows.zip','w',zipfile.ZIP_DEFLATED) as z:
+with zipfile.ZipFile(out/f'members-portal-{version}-windows.zip','w',zipfile.ZIP_DEFLATED) as z:
  for p in files:z.write(p,p.relative_to(root))
  z.writestr('MANIFEST.sha256.json',manifest_bytes)
 import io
-with tarfile.open(out/'members-portal-0.1.0-linux.tar.gz','w:gz') as t:
+with tarfile.open(out/f'members-portal-{version}-linux.tar.gz','w:gz') as t:
  for p in files:t.add(p,arcname=str(p.relative_to(root)),recursive=False)
  info=tarfile.TarInfo('MANIFEST.sha256.json');info.size=len(manifest_bytes);info.mode=0o644;t.addfile(info,io.BytesIO(manifest_bytes))
 checks=[]

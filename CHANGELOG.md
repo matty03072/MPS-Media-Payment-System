@@ -1,6 +1,6 @@
-# Preview changes
+# Changelog
 
-## 0.1.0-beta.6 — application licensing
+## 1.0.0 — application licensing
 
 - Added ten-member free allowance and £5/month subscription unlock for up to three applications.
 - Added installation-bound signed leases, periodic checks, retained-data fallback and registration removal.

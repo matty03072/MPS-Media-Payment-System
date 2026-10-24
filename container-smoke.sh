@@ -13,6 +13,7 @@ trap cleanup EXIT
 docker run -d --name preview-web --platform "$platform" --user 1000:1000 --cap-drop ALL --security-opt no-new-privileges --env UMBREL_BOOTSTRAP_PASSWORD --env PUBLIC_URL=http://localhost:18099 -p 127.0.0.1:18099:8099 -v "$state:/state" "$image" >/dev/null
 ready() { for attempt in $(seq 1 60); do if curl -fsS http://127.0.0.1:18099/health >/dev/null; then return 0; fi; sleep 2; done; return 1; }
 ready
+curl -fsS http://127.0.0.1:18099/health | python -c 'import json,sys; h=json.load(sys.stdin); assert h["version"] == h["installer_version"] == "1.0.0", h'
 test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:18099/setup)" = 401
 test "$(curl -s -o /dev/null -w '%{http_code}' -u "owner:$UMBREL_BOOTSTRAP_PASSWORD" http://127.0.0.1:18099/setup)" = 200
 before=$(sudo sha256sum "$state/config.json")
