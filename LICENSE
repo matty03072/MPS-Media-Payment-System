@@ -1,21 +1,50 @@
-MIT License
-
+MPS Source-Available No-Resale Licence, version 1.0
 Copyright (c) 2026 matty03072
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+1. Permission
+Subject to these terms, you may use, copy and modify MPS for your own personal
+or business operations, including collecting payments for memberships or your
+own services. You may self-host MPS and make backup copies. Commercial operation
+of your membership service is expressly permitted.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+2. No resale
+You may not sell, sublicense for a fee, or otherwise charge for copies of MPS
+or derivative versions of MPS without the copyright holder's separate written
+permission. This includes rebranded versions and bundling MPS into a paid software
+product where payment buys rights to MPS. Charging your members for your own
+membership services is not resale of MPS. Separately charging for installation
+or support does not itself constitute resale, provided you do not sell software
+rights you have not been granted.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+3. Member allowance and subscription
+The GitHub-distributed application provides a free allowance of ten members.
+Using the application above this allowance requires an active MPS unlock
+subscription, priced at GBP 5 per month at the time these terms were published.
+Administrators remain able to manage the installation and retained account
+information. Failed payment or the end of the subscription returns the app to
+its free allowance; it does not authorise deletion of stored account information.
+The application checks its entitlement with the licensing service. A subscription permits up to three registered applications. Do not forge codes,
+share them outside your licensed registrations, or circumvent activation or member
+limits. Removing a registration disables that application while retaining its data.
+Changes to price or subscription terms require separate notice and any consent
+required by applicable law; this document does not itself change existing charges.
+
+4. Copies and notices
+You may redistribute unmodified copies without charge with this licence and
+copyright notice intact. Modifications for your own use remain subject to these
+terms. This licence does not grant permission to use the MPS name or branding to
+misrepresent a modified product as an official release.
+
+5. Other rights and components
+Third-party components retain their own licences. These terms do not remove
+permissions already granted for earlier releases under other licences, including
+MIT, nor restrict rights that applicable law does not allow to be restricted.
+This is a source-available licence, not an OSI-approved open-source licence.
+
+6. Warranty and liability
+TO THE EXTENT PERMITTED BY APPLICABLE LAW, THE SOFTWARE IS PROVIDED "AS IS",
+WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. TO THAT SAME EXTENT,
+THE COPYRIGHT HOLDER IS NOT LIABLE FOR CLAIMS, DAMAGES OR OTHER LIABILITY
+ARISING FROM USE OF THE SOFTWARE. NOTHING HERE EXCLUDES NON-EXCLUDABLE
+CONSUMER RIGHTS OR LIABILITY.

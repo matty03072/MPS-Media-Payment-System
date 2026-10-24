@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% block content %}<h1>MPS licence</h1>
+<section class="card"><h2>{{ 'Unlimited members' if unlimited else 'Ten-member tier' }}</h2>
+<p>Unlock more members for £5 per month. A stopped or failed subscription returns MPS to ten members without deleting account information.</p>
+<p>Administrators keep access. On the free tier, the ten oldest enabled member accounts have MPS access; other accounts remain stored. Administrator accounts do not use a member place.</p>
+<p>Installation ID: <code>{{ installation_id }}</code></p>
+{% if purchase_url %}<a class="button" href="{{ purchase_url }}" rel="noreferrer">Get a £5/month unlock</a>{% else %}<p>Purchases are not configured in this build yet.</p>{% endif %}
+</section><section class="card"><h2>Activate or check subscription</h2>
+<p>{{ setting('mps_licence_status', 'No activation code has been added.') }}</p>
+{% if entitlement %}<p>Current check expires {{ entitlement.expires|date }}.</p>{% endif %}
+<form method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><label>Unlock code<input name="code" type="password" maxlength="200" autocomplete="off" placeholder="Leave blank to recheck the saved code"></label><button>Activate / check now</button></form>
+<p>Checks run every 15 minutes while the worker is running. If the service is unreachable, the current signed check lasts at most one hour before returning to ten members. Restoring payment and a successful check unlocks retained accounts again.</p></section>{% endblock %}

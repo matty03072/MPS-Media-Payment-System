@@ -111,7 +111,26 @@ Brand assets and colour specifications: [BRAND.md](BRAND.md). Existing app IDs a
 
 ## Licence
 
-MPS — Media Payment System is licensed under the [MIT License](LICENSE).
+MPS — Media Payment System is available under the [MPS Source-Available No-Resale Licence](LICENSE). Business use and collecting membership payments are allowed; resale of the application requires separate written permission. The GitHub-distributed app includes ten members free, with larger installations requiring an active £5/month unlock subscription. Account data is retained when a subscription ends.
 Copyright (c) 2026 matty03072.
 
 Third-party dependencies retain their own licences.
+
+
+### Subscription and application registrations
+
+The £5/month unlock includes up to three registered applications. The purchase
+and licence-management service is hosted separately on the publisher's Members
+site. Licence customers use verified email/password accounts and mandatory MFA.
+No publisher Stripe secret or private signing key is included in the client.
+
+The client checks every 15 minutes and accepts only signed, application-bound
+checks lasting at most one hour. If payment fails or the subscription ends, the
+ten oldest enabled non-admin members retain MPS access and all other account
+information remains stored. Administrators retain licence-management access.
+Removing an application registration disables that application on its next check
+(or by the current check's expiry offline), retaining its data. Removing a
+registration does not cancel the subscription; billing is managed separately.
+
+This feature branch is not a released build. The real issuer public key and live
+service proof are required before the release preflight permits publishing.

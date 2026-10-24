@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% block content %}<link rel="stylesheet" href="{{ url_for('mps_store.static',filename='licences.css') }}"><div class="mps-store">
+<section class="card"><p class="eyebrow">MPS — MEDIA PAYMENT SYSTEM</p><h1>More members. One simple plan.</h1>
+<p>Use MPS free with up to ten members. Unlock more members for <strong>£5 per month</strong>.</p>
+<p><a href="{{ url_for('mps_accounts.dashboard') }}">My licence account</a> · <a href="{{ url_for('mps_accounts.register') }}">Create account</a></p>
+<p>Collect your own membership payments, manage your community and keep your data on your own installation.</p>
+{% if enabled %}<form method="post" action="{{ url_for('mps_store.checkout') }}">
+<input type="hidden" name="csrf" value="{{ csrf }}">
+<p>Your subscription includes up to three registered MPS applications. Sign in with email, password and MFA to purchase and manage your registrations.</p>
+<label><input type="checkbox" name="terms" value="yes" required> I accept the <a href="{{ url_for('mps_store.terms') }}">MPS licence terms</a> and the recurring £5 monthly subscription.</label>
+<p>We record each registered application’s unique ID and registration/check-in IP addresses to manage your three-application allowance. You can review and remove registrations in your account.</p>
+<p>If payment fails or the subscription ends, MPS returns to the ten-member tier. Account information is retained. An internet connection is required for periodic licence checks.</p>
+<button>Subscribe for £5/month</button></form>
+{% else %}<p>Subscriptions are not open yet. Please check back shortly.</p>{% endif %}</section>
+</div>{% endblock %}

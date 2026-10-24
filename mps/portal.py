@@ -57,6 +57,8 @@ def join(token):
         if not valid_password(password) or password!=request.form.get('confirm') or request.form.get('consent')!='yes':abort(400,'Confirm your password (12–256 characters) and agree to account creation.')
         if invite.recipient and invite.recipient!=email:abort(400,'This invitation belongs to a different email address.')
         if not current_app.config.get('MAIL_SENDER') and not setting('smtp_host'):abort(503,'Email verification is not configured. Ask the administrator to configure SMTP.')
+        from .licensing import reserve_member
+        reserve_member()
         changed=db().execute(update(Invite).where(Invite.id==invite.id,Invite.revoked==False,Invite.expires>time.time(),Invite.uses<Invite.max_uses).values(uses=Invite.uses+1)).rowcount
         if not changed:db().rollback();abort(409,'This invitation has no places remaining.')
         member=Member(email=email,username=name,username_key=name.casefold(),password_hash=generate_password_hash(password),requires_payment=invite.requires_payment)

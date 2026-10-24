@@ -1,0 +1,12 @@
+{% extends 'base.html' %}{% block content %}<link rel="stylesheet" href="{{ url_for('mps_store.static',filename='licences.css') }}"><div class="mps-store"><section class="card"><p class="eyebrow">MPS LICENCE ACCOUNT</p>
+<h1>{{ {'register':'Create your account','login':'Sign in','verify':'Verify your email','verify-confirm':'Confirm your email','mfa-setup':'Set up multi-factor authentication','mfa':'Verify your sign-in','recovery':'Save your recovery codes','forgot':'Reset your password','reset':'Choose a new password'}[kind] }}</h1>
+{% if kind == 'recovery' %}<p>Keep these one-use codes somewhere safe. They let you sign in if you lose your authenticator. They will not be shown again.</p><ul>{% for code in codes %}<li><code>{{ code }}</code></li>{% endfor %}</ul><a href="{{ url_for('mps_accounts.dashboard') }}">Continue to your licences</a>
+{% else %}<form method="post"><input type="hidden" name="csrf" value="{{ csrf }}">
+{% if kind in ['register','login','forgot'] %}<label>Email<input name="email" type="email" maxlength="254" required autocomplete="email"></label>{% endif %}
+{% if kind in ['register','login','reset'] %}<label>Password<input name="password" type="password" required maxlength="256" {% if kind != 'login' %}minlength="12" autocomplete="new-password"{% else %}autocomplete="current-password"{% endif %}></label>{% endif %}
+{% if kind in ['register','reset'] %}<label>Confirm password<input name="confirm" type="password" required minlength="12" maxlength="256" autocomplete="new-password"></label>{% endif %}
+{% if kind == 'mfa-setup' %}<p>Scan this code with your authenticator app. MFA is required for purchases and licence management.</p><img width="240" height="240" src="data:image/png;base64,{{ qr }}" alt="Authenticator setup QR code"><p>Manual setup key: <code>{{ secret }}</code></p>{% endif %}
+{% if kind in ['mfa-setup','mfa'] %}<label>{{ 'Authenticator or recovery code' if kind == 'mfa' else 'Current authenticator code' }}<input name="code" required autocomplete="one-time-code"></label>{% endif %}
+{% if kind == 'verify' %}<p>Open the verification email before setting up MFA. Didn’t receive it? You can request another.</p>{% endif %}
+<button>{{ 'Resend verification email' if kind == 'verify' else 'Continue' }}</button></form>{% endif %}
+<p><a href="{{ url_for('mps_accounts.login') }}">Sign in</a> · <a href="{{ url_for('mps_accounts.register') }}">Create account</a> · <a href="{{ url_for('mps_accounts.forgot') }}">Forgot password?</a></p></section></div>{% endblock %}

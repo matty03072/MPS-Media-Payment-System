@@ -8,6 +8,10 @@ from .emby import APIError
 
 def tick():
     # Run exactly one scheduled worker instance; compare-and-update also prevents duplicate event claims.
+    from .licensing import prepare, refresh, blocked
+    prepare();refresh()
+    if blocked():
+        put('worker_seen',str(time.time()));db().commit();return
     db().expire_all()
     db().execute(update(Event).where(Event.state=='running',Event.claimed<time.time()-600).values(state='retry'));db().commit()
     events=db().scalars(select(Event).where(Event.state.in_(['pending','retry'])).order_by(Event.created).limit(50)).all()

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% block content %}<link rel="stylesheet" href="{{ url_for('mps_store.static',filename='licences.css') }}"><div class="mps-store">
+<h1>MPS licence administration</h1><p>£5 per month · GitHub-distributed MPS · separate from member subscriptions.</p>
+<section class="card"><h2>Sales settings</h2><form method="post">
+<input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="action" value="settings">
+<label>Stripe monthly Price ID<input name="price_id" value="{{ setting('mps_stripe_price') }}" required></label>
+<label>Licence webhook signing secret<input type="password" name="webhook_secret" autocomplete="new-password" placeholder="Leave blank to keep existing secret"></label>
+<label><input type="checkbox" name="enabled" value="yes" {% if setting('mps_sales_enabled') == '1' %}checked{% endif %}> Enable purchases</label>
+<button>Save sales settings</button></form></section>
+<section class="card"><h2>Recent orders</h2><div class="mps-table-scroll"><table><thead><tr><th>Customer</th><th>Installation</th><th>Payment</th><th>Email</th><th>Actions</th></tr></thead><tbody>
+{% for order in orders %}<tr><td>{{ order.email }}<br><small>{{ order.id }}</small></td><td>{% for reg in registrations[order.id] %}{{ reg.application_id }} · {{ 'active' if reg.active else 'removed' }}<br>{{ reg.first_ip }} → {{ reg.last_ip }}<br><form method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="order_id" value="{{ order.id }}"><input type="hidden" name="application_id" value="{{ reg.application_id }}"><button name="action" value="{{ 'remove_application' if reg.active else 'restore_application' }}">{{ 'Disable application' if reg.active else 'Restore application' }}</button></form>{% else %}No registrations{% endfor %}</td><td>{{ 'TEST · ' if not order.live else '' }}{{ order.state }}{% if order.revoked %} · revoked{% endif %}</td><td>{{ order.email_state }} ({{ order.email_attempts }} attempts)</td><td>
+<form method="post"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="order_id" value="{{ order.id }}">
+{% if order.encrypted_code %}<button name="action" value="resend">Resend code</button>{% endif %}<button name="action" value="{{ 'restore' if order.revoked else 'revoke' }}">{{ 'Restore' if order.revoked else 'Revoke' }}</button></form></td></tr>
+{% else %}<tr><td colspan="5">No licence orders yet.</td></tr>{% endfor %}</tbody></table></div>
+<p>“Accepted” means the mail server accepted the email, not proof that it reached the inbox. Revoking a code does not cancel Stripe billing.</p></section></div>{% endblock %}
