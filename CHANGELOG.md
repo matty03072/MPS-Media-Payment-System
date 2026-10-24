@@ -1,5 +1,19 @@
 # Preview changes
 
+## 0.1.0-beta.6 — application licensing
+
+- Added ten-member free allowance and £5/month subscription unlock for up to three applications.
+- Added installation-bound signed leases, periodic checks, retained-data fallback and registration removal.
+- Added separate verified-email/MFA licence accounts and owner-only Stripe fulfilment/email service.
+- Added MPS-branded licence storefront and email templates.
+- Changed new-build terms to the MPS Source-Available No-Resale Licence; membership-service payments remain permitted and earlier grants remain unchanged.
+- Fixed Docker context inclusion of the shared licence verifier and added candidate image checks.
+- Added authenticated private support with anti-spam checks and retryable delivery.
+- Added self-service period-end cancellation and idempotent full refunds requested within 14 days of payment, including renewals.
+- Added seller, cancellation/refund and privacy pages plus durable subscription terms in licence emails.
+- Verified a real sandbox webhook, automatic licence email receipt, activation and cancellation/refund.
+- Published seller/contact and cancellation/privacy notices; support remains a signed-in form.
+
 ## 0.1.0-beta.5
 
 - Added Configuration → Branding with a custom site name and validated logo uploads.

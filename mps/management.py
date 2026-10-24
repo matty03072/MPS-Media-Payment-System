@@ -31,6 +31,9 @@ def new_member(admin=False):
     email=request.form.get('email','').strip().lower();name=request.form.get('username','').strip()
     if not username_valid(name) or len(email)>254 or not re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+',email):abort(400,'Enter a valid email and a 3–40 character username using letters, numbers, dots, hyphens or underscores.')
     if db().scalar(select(Member).where((Member.email==email)|(Member.username_key==name.casefold()))):abort(409,'That email or username already exists. Link or promote the existing member instead.')
+    if not admin:
+        from .licensing import reserve_member
+        reserve_member()
     member=Member(email=email,username=name,username_key=name.casefold(),password_hash=generate_password_hash(secrets.token_urlsafe(48)),admin=admin,verified=False)
     db().add(member);db().flush();return member
 

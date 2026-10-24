@@ -8,7 +8,7 @@ COPY templates ./templates
 COPY static ./static
 COPY installer ./installer
 COPY tests ./tests
-COPY app.py serve.py container.py ./
+COPY app.py serve.py container.py mps_licence_tokens.py ./
 USER 1000:1000
 ENTRYPOINT ["python", "container.py"]
 CMD ["web"]

@@ -111,7 +111,41 @@ Brand assets and colour specifications: [BRAND.md](BRAND.md). Existing app IDs a
 
 ## Licence
 
-MPS — Media Payment System is licensed under the [MIT License](LICENSE).
+MPS — Media Payment System is available under the [MPS Source-Available No-Resale Licence](LICENSE). Business use and collecting membership payments are allowed; resale of the application requires separate written permission. The GitHub-distributed app includes ten members free, with larger installations requiring an active £5/month unlock subscription. Account data is retained when a subscription ends.
 Copyright (c) 2026 matty03072.
 
 Third-party dependencies retain their own licences.
+
+
+### Subscription and application registrations
+
+The £5/month unlock includes up to three registered applications. The purchase
+and licence-management service is hosted separately on the publisher's Members
+site. Licence customers use verified email/password accounts and mandatory MFA.
+No publisher Stripe secret or private signing key is included in the client.
+
+The client checks every 15 minutes and accepts only signed, application-bound
+checks lasting at most one hour. If payment fails or the subscription ends, the
+ten oldest enabled non-admin members retain MPS access and all other account
+information remains stored. Administrators retain licence-management access.
+Removing an application registration disables that application on its next check
+(or by the current check's expiry offline), retaining its data. Removing a
+registration does not cancel the subscription; billing is managed separately.
+
+### Application licensing
+
+Version 0.1.0-beta.6 introduces the application licensing terms below.
+The licence site is https://members.streaminghome.app/mps. The client includes
+only its HTTPS origin and public verification key, never server credentials.
+See [application licensing](docs/APPLICATION-LICENSING.md) for activation,
+limits, cancellation effects and upgrade preparation.
+
+Existing preview installations with more than ten enabled non-admin members
+should back up `/state` and read the new terms before updating. Once installed,
+the licensing build enforces the free allowance until a valid subscription is
+activated. Do not update a larger installation expecting an automatic paid unlock.
+Earlier releases retain their original licence terms; this change is prospective.
+
+The release preflight checks public-key configuration and matching terms only.
+It does **not** prove payment, webhook, SMTP or activation availability. The real sandbox payment, webhook, licence-email, activation and refund checks
+were completed before release. The purchase site displays current sales availability.

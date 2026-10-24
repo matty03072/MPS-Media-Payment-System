@@ -86,6 +86,10 @@ def create_app(config=None):
         return {'status':'ok','application':'MPS','version':'0.3.0','installer_version':'0.1.0','database':engine.dialect.name}
     from . import auth,portal,admin,billing,management,paypal,revenue,plans,deletion,guides,availability,connected
     for blueprint in (auth.bp,portal.bp,admin.bp,billing.bp,management.bp,paypal.bp,revenue.bp,plans.bp,deletion.bp,guides.bp,availability.bp,connected.bp):app.register_blueprint(blueprint)
+    from .licensing import bp as licensing_bp, prepare as prepare_licensing, enforce_revocation
+    app.register_blueprint(licensing_bp)
+    app.before_request(prepare_licensing)
+    app.before_request(enforce_revocation)
     from .setup import bp as setup_bp
     app.register_blueprint(setup_bp)
     @app.cli.command('init-db')

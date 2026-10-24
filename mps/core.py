@@ -41,6 +41,10 @@ def login_required(fn):
         if not member:return redirect(url_for('auth.login'))
         if member.mfa_enabled and not session.get('mfa_ok'):return redirect(url_for('auth.challenge'))
         if member.admin and not member.mfa_enabled:return redirect(url_for('auth.security'))
+        if not member.admin:
+            from .licensing import allowed
+            if not allowed(member) and request.endpoint not in ('auth.logout',):
+                abort(403,'This account is retained but is outside the installation’s current ten-member allowance. Ask your administrator to renew the MPS subscription.')
         return fn(*args,**kwargs)
     return wrapped
 
