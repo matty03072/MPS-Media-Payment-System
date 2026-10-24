@@ -24,7 +24,8 @@ Owner routes:
 2. Take and verify SQL COPY_ONLY/CHECKSUM backup plus affected source backups.
 3. Stage the extension against a disposable SQL Server database. Run customer,
    payment, concurrency and migration tests; confirm the live DB is never a test target.
-4. Add the reviewed wrapper to the existing web entry point and an admin navigation
+4. Add the reviewed wrapper to app.py and change serve.py to import create_app from app
+   (the Windows service starts serve.py directly). Add an admin navigation
    link. No GitHub-client restriction code is imported by this wrapper.
 5. Run `flask --app app:create_app mps-store-init` with the existing Members config.
    This creates only new `mps_licence_*` tables and a server-side private signing key.
