@@ -23,7 +23,14 @@ def install(app, host_package='streaminghome'):
     bp = Blueprint('mps_store', __name__, template_folder='templates', static_folder='static', static_url_path='/mps-assets')
     from types import SimpleNamespace
     host_mail = mail
-    mail = SimpleNamespace(send_mail=lambda to, subject, body: host_mail.send_mail(to, subject, body, **({'brand':'MPS'} if host_package == 'streaminghome' else {})))
+    def licence_mail(to, subject, body):
+        if subject == 'Your MPS unlock code':
+            body += ('\n\nSubscription contract — MPS, 24 October 2026\nSeller: '+core.setting('mps_seller_name')+'\n'+core.setting('mps_seller_address')+
+                '\nContact: '+core.setting('mps_public_contact')+'\nGBP 5 per month; three applications; monthly renewal until cancelled. No delivery fee.\n'
+                'Cancel in your licence account. Cancellation is effective at the current billing period end. Request within 14 days of the latest payment for a full refund of that payment. Licence access remains until the billing period end. Statutory rights are unaffected.\n'
+                'Cancellation requests can also be sent to the seller contact with your account email and order reference.\nPrivacy notice: '+app.config['PUBLIC_URL']+'/mps/privacy\n\n'+Path(__file__).resolve().parent.joinpath('TERMS.txt').read_text())
+        return host_mail.send_mail(to, subject, body, **({'brand':'MPS'} if host_package == 'streaminghome' else {}))
+    mail = SimpleNamespace(send_mail=licence_mail)
     supported = {'checkout.session.completed', 'checkout.session.async_payment_succeeded',
                  'invoice.paid', 'invoice.payment_failed', 'customer.subscription.updated', 'customer.subscription.deleted'}
 
@@ -72,7 +79,9 @@ def install(app, host_package='streaminghome'):
                 if sub.get('status') not in ('canceled', 'incomplete_expired'):
                     core.db().commit()
                     return redirect(url_for('mps_accounts.dashboard'))
-                existing.state='pending';existing.subscription_id='';existing.checkout_id='';existing.checkout_cycle+=1
+                # Preserve the prior cancellation and refund audit trail.
+                # A new purchase receives a new order and unlock code.
+                existing = None
             elif existing.checkout_id:
                 previous=remote().get('/checkout/sessions/'+existing.checkout_id)
                 if previous.get('status')=='open':
@@ -114,7 +123,16 @@ def install(app, host_package='streaminghome'):
     @bp.get('/mps/terms')
     def terms():
         from flask import Response
-        return Response(Path(__file__).resolve().parent.joinpath('TERMS.txt').read_text(), mimetype='text/plain')
+        seller = 'MPS subscription service\nSeller: '+core.setting('mps_seller_name')+'\n'+core.setting('mps_seller_address')+'\nContact: '+core.setting('mps_public_contact')+'\nCancellation and refunds: '+app.config['PUBLIC_URL']+'/mps/cancellation\nPrivacy: '+app.config['PUBLIC_URL']+'/mps/privacy\n\n'
+        return Response(seller+Path(__file__).resolve().parent.joinpath('TERMS.txt').read_text(), mimetype='text/plain')
+
+    @bp.get('/mps/privacy')
+    def privacy():
+        return render_template('mps_store/policy.html',kind='privacy',seller=core.setting('mps_seller_name'),address=core.setting('mps_seller_address'),contact=core.setting('mps_public_contact'))
+
+    @bp.get('/mps/cancellation')
+    def cancellation_policy():
+        return render_template('mps_store/policy.html',kind='cancellation',seller=core.setting('mps_seller_name'),address=core.setting('mps_seller_address'),contact=core.setting('mps_public_contact'))
 
     @bp.post('/mps/stripe/webhook')
     def webhook():
@@ -219,5 +237,8 @@ def install(app, host_package='streaminghome'):
         while True:
             process_events(core.db(), remote(), signing_key(), core.seal)
             deliver(core.db(), core.unseal, mail.send_mail)
+            from .lifecycle import process_cancellations, deliver_support
+            process_cancellations(core.db(), remote())
+            deliver_support(core.db(), core.unseal, mail.send_mail, core.setting('mps_support_email'))
             if once:break
             time.sleep(30)

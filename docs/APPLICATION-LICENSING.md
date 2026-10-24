@@ -42,13 +42,25 @@ publisher's private signing key, Stripe credentials or customer database.
   check; an offline instance cannot retain paid access beyond lease expiry.
 - A received disabled state remains disabled after its lease expires. Normal
   app routes and worker activity stop; licence recovery and data remain available.
-- Removing a registration is **not** subscription cancellation. Use billing
-  management in the licence account for subscription changes.
+- Removing a registration is **not** subscription cancellation. Use **Cancel subscription**
+  in the licence account to stop renewal. Payment-method management is separate.
 
 Application UUIDs, first/latest connection IPs, check-in times and registration
-history are held by the licence service to manage registrations. Commercial
-seller/support, refund/cancellation and privacy disclosures must be published
-before paid sales are enabled.
+history are held by the licence service to manage registrations. The purchase site publishes seller details, cancellation/refund terms and a privacy notice.
+
+## Cancellation, refunds and support
+
+Cancel in your verified, MFA-protected licence account and confirm your password.
+Cancellation stops the next renewal; the unlock remains valid until the current
+billing-period end, then returns to the free allowance without deleting data.
+A request within 14 days after the latest successful payment receives a full refund
+of that payment, including monthly renewals. Access still lasts until period end.
+Your account displays cancellation and refund processing status. Statutory rights
+are unaffected. A subsequent purchase creates a new order and unlock code.
+
+The signed-in support form accepts your reply email and issue. Requests are sent
+to the operator through a private destination, with CSRF, MFA, rate limits,
+anti-bot checks and an encrypted retryable outbox. Never submit passwords or keys.
 
 ## Upgrades
 
@@ -61,5 +73,9 @@ all enabled members' MPS access. Review these changes before upgrading.
 
 This is the licensing release candidate. Paid sales are disabled. Automated tests
 cover signatures, invalid/test/expired leases, member boundaries, MFA/CSRF,
-webhook replay, email retries and registration limits. Those checks do not replace
-an integrated real Stripe sandbox purchase-to-email-to-activation verification.
+webhook replay, email retries and registration limits. On 24 October 2026, an isolated Stripe sandbox purchase verified genuine network
+webhook delivery/signatures, automatic issuance, inbox receipt and activation.
+The receiver and isolated worker were bridged by exporting the authenticated event;
+this was not a production purchase. Real sandbox period-end cancellation and a
+full refund also succeeded. Paid launch still requires complete public seller contact
+disclosures and final release checks.

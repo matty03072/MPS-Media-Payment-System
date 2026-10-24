@@ -18,10 +18,10 @@ Status: owner licence service deployed with sales disabled; client licensing rel
 - Check in with the licence server; failed/stopped payment returns the installation
   to ten-member mode. Keep all account information.
 
-## Pending details
+## Service details
 
 - Purchase site: https://members.streaminghome.app/mps.
-- Whether excess members lose MPS access only or also linked Emby/Ombi access.
+- Excess members lose MPS access only; linked Emby/Ombi accounts are not changed by licensing.
 
 ## Additional confirmed requirements
 
@@ -60,5 +60,6 @@ Forged/cross-installation/test/expired tokens; 10/11 member boundary and concurr
 admission; administrative bypass paths; webhook signatures and duplicate/out-of-order
 events; unpaid/wrong-price/wrong-mode checkout rejection; retry after payment and
 SMTP failures; admin authentication/CSRF; SQL Server migration and restart; real
-Stripe test checkout, email and activation. Refund/subscription policy depends on
-the purchase model and must be specified before enabling sales.
+Stripe test checkout, email and activation. The cancellation/refund policy is now specified in the customer documentation: cancellation
+at period end, full latest-payment refund for requests within 14 days, and paid access
+retained until period end. Public legal-contact disclosure remains a launch gate.

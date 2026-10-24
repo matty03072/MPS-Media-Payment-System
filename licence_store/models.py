@@ -94,3 +94,32 @@ class ActivationLog(Base):
     action: Mapped[str] = mapped_column(String(30))
     ip: Mapped[str] = mapped_column(String(45))
     created: Mapped[float] = mapped_column(Float, default=time.time)
+
+
+class Cancellation(Base):
+    __tablename__ = 'mps_licence_cancellations'
+    order_id: Mapped[str] = mapped_column(ForeignKey('mps_licence_orders.id'), primary_key=True)
+    requested: Mapped[float] = mapped_column(Float, default=time.time)
+    invoice_id: Mapped[str] = mapped_column(String(120))
+    ends: Mapped[float] = mapped_column(Float)
+    cancel_status: Mapped[str] = mapped_column(String(24), default='pending')
+    refund_status: Mapped[str] = mapped_column(String(24), default='checking')
+    refund_id: Mapped[str] = mapped_column(String(120), default='')
+    attempts: Mapped[int] = mapped_column(Integer, default=0)
+    next_attempt: Mapped[float] = mapped_column(Float, default=0)
+    claim: Mapped[str] = mapped_column(String(36), default='')
+    claimed: Mapped[float] = mapped_column(Float, default=0)
+    error: Mapped[str] = mapped_column(String(160), default='')
+
+
+class SupportTicket(Base):
+    __tablename__ = 'mps_licence_support'
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    customer_id: Mapped[str] = mapped_column(ForeignKey('mps_licence_customers.id'), index=True)
+    encrypted_message: Mapped[str] = mapped_column(Text)
+    created: Mapped[float] = mapped_column(Float, default=time.time)
+    state: Mapped[str] = mapped_column(String(24), default='pending')
+    attempts: Mapped[int] = mapped_column(Integer, default=0)
+    next_attempt: Mapped[float] = mapped_column(Float, default=0)
+    claim: Mapped[str] = mapped_column(String(36), default='')
+    claimed: Mapped[float] = mapped_column(Float, default=0)

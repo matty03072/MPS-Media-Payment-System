@@ -12,7 +12,7 @@ from flask import Blueprint, abort, flash, redirect, render_template, request, s
 from sqlalchemy import select, delete, update
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash, generate_password_hash
-from .models import Customer, CustomerToken, RecoveryCode, Order, Activation
+from .models import Customer, CustomerToken, RecoveryCode, Order, Activation, Cancellation, SupportTicket
 from .service import remove_activation
 
 
@@ -181,7 +181,8 @@ def install(app, core, mail, remote):
         customer=current()
         orders=core.db().scalars(select(Order).where(Order.customer_id==customer.id).order_by(Order.created.desc())).all()
         registrations={order.id:core.db().scalars(select(Activation).where(Activation.order_id==order.id).order_by(Activation.registered)).all() for order in orders}
-        return render_template('mps_store/customer.html',customer=customer,orders=orders,registrations=registrations)
+        cancellations={order.id:core.db().get(Cancellation,order.id) for order in orders}
+        return render_template('mps_store/customer.html',customer=customer,orders=orders,registrations=registrations,cancellations=cancellations)
 
     @bp.post('/mps/account/remove')
     @login_required
@@ -203,7 +204,8 @@ def install(app, core, mail, remote):
         if not order or order.customer_id!=customer.id or not order.subscription_id:abort(404)
         sub=remote().get('/subscriptions/'+order.subscription_id)
         if sub.get('metadata',{}).get('mps_order_id')!=order.id:abort(409,'Subscription ownership needs review.')
-        result=remote().post('/billing_portal/sessions',{'customer':sub['customer'],'return_url':app.config['PUBLIC_URL']+'/mps/account'},'mps-portal-'+order.id+'-'+str(int(time.time()//30)))
+        if not core.setting('mps_billing_portal_config'):abort(503,'Payment management is not yet configured. Use the account cancellation form or contact support.')
+        result=remote().post('/billing_portal/sessions',{'customer':sub['customer'],'return_url':app.config['PUBLIC_URL']+'/mps/account', **({'configuration':core.setting('mps_billing_portal_config')} if core.setting('mps_billing_portal_config') else {})},'mps-portal-'+order.id+'-'+str(int(time.time()//30)))
         return redirect(result['url'],303)
 
     @bp.post('/mps/account/resend')
@@ -214,6 +216,52 @@ def install(app, core, mail, remote):
         if not order or order.customer_id!=customer.id or not order.encrypted_code:abort(404)
         order.email_state='pending';order.email_next=0;core.db().commit()
         flash('Your unlock-code email has been queued.','success');return redirect(url_for('mps_accounts.dashboard'))
+
+    @bp.post('/mps/account/cancel')
+    @login_required
+    def cancel_subscription():
+        from .lifecycle import request_cancellation, process_cancellations
+        customer=current();core.rate_limit('mps-cancel',5,customer.id)
+        order=core.db().get(Order,request.form.get('order_id',''))
+        if not order or order.customer_id!=customer.id or not order.subscription_id:abort(404)
+        if not check_password_hash(customer.password_hash,request.form.get('password','')):abort(400,'Confirm your password to cancel.')
+        if request.form.get('confirm')!='yes':abort(400,'Confirm cancellation.')
+        try:
+            request_cancellation(core.db(),remote(),order)
+            process_cancellations(core.db(),remote())
+        except Exception:
+            core.db().rollback();abort(503,'Cancellation could not be confirmed. Please retry or contact support.')
+        flash('Cancellation request saved. Check the status and refund details below.','success')
+        return redirect(url_for('mps_accounts.dashboard'))
+
+    @bp.route('/mps/support',methods=['GET','POST'])
+    @login_required
+    def support():
+        customer=current()
+        if request.method=='POST':
+            core.rate_limit('mps-support-ip',10)
+            core.rate_limit('mps-support-account',3,customer.id)
+            started=session.get('mps_support_started',0)
+            if request.form.get('website') or not 3<=time.time()-started<=3600:
+                abort(400,'Please reload the support form and try again.')
+            email=request.form.get('email','').strip()
+            issue=request.form.get('issue','').strip()
+            if len(email)>254 or not re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+',email):abort(400,'Enter a valid reply email address.')
+            if not 20<=len(issue)<=5000 or '\x00' in issue:abort(400,'Describe the issue in 20–5000 characters.')
+            if not core.setting('mps_support_email'):abort(503,'Support delivery is not yet configured.')
+            nonce=session.pop('mps_support_nonce',None)
+            if not nonce:abort(400,'This support form has already been submitted. Reload it.')
+            body='Licence account: '+customer.email+'\nReply email: '+email+'\nCustomer ID: '+customer.id+'\n\nIssue:\n'+issue
+            row=SupportTicket(id=nonce,customer_id=customer.id,encrypted_message=core.seal(body))
+            core.db().add(row);core.db().commit()
+            from .lifecycle import deliver_support
+            deliver_support(core.db(),core.unseal,mail.send_mail,core.setting('mps_support_email'))
+            flash('Support request '+row.id+' received. We will reply to your email.','success')
+            return redirect(url_for('mps_accounts.support'))
+        session['mps_support_started']=time.time()
+        import uuid
+        session['mps_support_nonce']=str(uuid.uuid4())
+        return render_template('mps_store/support.html',customer=customer)
 
     app.register_blueprint(bp)
     return current, login_required

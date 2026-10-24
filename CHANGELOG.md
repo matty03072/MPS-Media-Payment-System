@@ -8,7 +8,11 @@
 - Added MPS-branded licence storefront and email templates.
 - Changed new-build terms to the MPS Source-Available No-Resale Licence; membership-service payments remain permitted and earlier grants remain unchanged.
 - Fixed Docker context inclusion of the shared licence verifier and added candidate image checks.
-- Paid launch remains blocked until integrated sandbox and commercial-policy checks complete.
+- Added authenticated private support with anti-spam checks and retryable delivery.
+- Added self-service period-end cancellation and idempotent full refunds requested within 14 days of payment, including renewals.
+- Added seller, cancellation/refund and privacy pages plus durable subscription terms in licence emails.
+- Verified a real sandbox webhook, automatic licence email receipt, activation and cancellation/refund.
+- Paid launch remains gated on complete public seller-contact disclosure and final release checks.
 
 ## 0.1.0-beta.5
 

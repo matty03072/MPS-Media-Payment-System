@@ -117,7 +117,7 @@ class AccountTests(unittest.TestCase):
             def get(self,path):return self.objects[path]
             def post(self,path,data,key):
                 self.posts.append((path,data,key))
-                return {'id':'cs_flow','url':'https://checkout.stripe.com/fixture'}
+                return {'id':getattr(self,'next_checkout','cs_flow'),'url':'https://checkout.stripe.com/fixture'}
         remote=StripeFixture();remote.objects={'/prices/price_fixture':{'active':True,'unit_amount':500,'currency':'gbp','livemode':False,'recurring':{'interval':'month','interval_count':1}}}
         self.app.config['MPS_STORE_STRIPE_FACTORY']=lambda:remote
         initialized=self.app.test_cli_runner().invoke(args=['mps-store-init'])
@@ -155,3 +155,17 @@ class AccountTests(unittest.TestCase):
         result=self.client.post('/mps/api/check-in',json={'code':code,'installation_id':appids[0]})
         self.assertEqual(verify(result.json['lease'],public,appids[0],allow_test=True)['member_limit'],-1)
         self.assertEqual(self.client.post('/mps/api/check-in',json={'code':code,'installation_id':appids[3]}).status_code,200)
+
+        # Repurchasing must not inherit the previous cancellation/refund request.
+        from licence_store.models import Cancellation
+        with self.app.app_context():
+            db().add(Cancellation(order_id=oid,invoice_id='in_flow',ends=time.time(),cancel_status='scheduled',refund_status='succeeded'));db().commit()
+        remote.objects['/subscriptions/sub_flow']['status']='canceled'
+        remote.next_checkout='cs_new_subscription'
+        self.assertEqual(self.post('/mps/checkout',{'terms':'yes'}).status_code,303)
+        with self.app.app_context():
+            orders=db().scalars(select(Order).where(Order.customer_id==self.customer.id)).all()
+            self.assertEqual(len(orders),2)
+            self.assertEqual(db().get(Cancellation,oid).refund_status,'succeeded')
+            new=next(x for x in orders if x.id!=oid)
+            self.assertIsNone(db().get(Cancellation,new.id))
