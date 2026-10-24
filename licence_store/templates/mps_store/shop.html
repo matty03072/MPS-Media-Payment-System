@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% block content %}<link rel="stylesheet" href="{{ url_for('mps_store.static',filename='licences.css') }}"><div class="mps-store">
+{% extends 'mps_store/base.html' %}{% block content %}<link rel="stylesheet" href="{{ url_for('mps_store.static',filename='licences.css') }}"><div class="mps-store">
 <section class="card"><p class="eyebrow">MPS — MEDIA PAYMENT SYSTEM</p><h1>More members. One simple plan.</h1>
 <p>Use MPS free with up to ten members. Unlock more members for <strong>£5 per month</strong>.</p>
 <p><a href="{{ url_for('mps_accounts.dashboard') }}">My licence account</a> · <a href="{{ url_for('mps_accounts.register') }}">Create account</a></p>

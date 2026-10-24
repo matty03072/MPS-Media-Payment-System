@@ -6,7 +6,9 @@ Never put production secrets or the private signing key in this repository.
 ## Package boundary
 
 Only deploy `licence_store/`, `mps_licence_tokens.py`, and the reviewed owner entry
-point wrapper. Do NOT deploy the GitHub client's `mps/`, `LICENSE`, member limits,
+point wrapper. The reviewed `deploy/owner_mail.py` adapter supplies the explicit
+MPS brand argument used by the extension; merge it against the current host mail
+implementation before installing it as `streaminghome/mail.py`. Do NOT deploy the GitHub client's `mps/`, `LICENSE`, member limits,
 or worker changes into StreamingHome. The wrapper calls the original
 `streaminghome.create_app`, then adds the licence shop and customer-account routes.
 
@@ -17,7 +19,7 @@ Owner routes:
 - `/mps/stripe/webhook`: separate Stripe signing secret and event inbox.
 - `/mps/api/check-in`: activation-key-authenticated, installation-bound signed leases.
 
-## Deployment sequence when access returns
+## Deployment sequence
 
 1. Inspect live source/config/service definitions; reconcile drift with the local
    StreamingHome source. Preserve current server identity and existing SSH keys.

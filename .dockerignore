@@ -14,3 +14,5 @@
 !tests/**
 **/__pycache__
 **/*.pyc
+
+!mps_licence_tokens.py

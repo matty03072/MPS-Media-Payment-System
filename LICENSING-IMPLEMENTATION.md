@@ -1,6 +1,6 @@
 # MPS licensing implementation
 
-Status: isolated work in progress; not deployed or released.
+Status: owner licence service deployed with sales disabled; client licensing release candidate not yet released.
 
 ## Requested outcome
 
@@ -20,7 +20,7 @@ Status: isolated work in progress; not deployed or released.
 
 ## Pending details
 
-- Purchase site hostname/route can be chosen after reviewing existing hosting.
+- Purchase site: https://members.streaminghome.app/mps.
 - Whether excess members lose MPS access only or also linked Emby/Ombi access.
 
 ## Additional confirmed requirements

@@ -21,6 +21,9 @@ def install(app, host_package='streaminghome'):
     integration = importlib.import_module(host_package + '.integrations')
     mail = importlib.import_module(host_package + '.mail')
     bp = Blueprint('mps_store', __name__, template_folder='templates', static_folder='static', static_url_path='/mps-assets')
+    from types import SimpleNamespace
+    host_mail = mail
+    mail = SimpleNamespace(send_mail=lambda to, subject, body: host_mail.send_mail(to, subject, body, **({'brand':'MPS'} if host_package == 'streaminghome' else {})))
     supported = {'checkout.session.completed', 'checkout.session.async_payment_succeeded',
                  'invoice.paid', 'invoice.payment_failed', 'customer.subscription.updated', 'customer.subscription.deleted'}
 

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% block content %}<link rel="stylesheet" href="{{ url_for('mps_store.static',filename='licences.css') }}"><div class="mps-store"><section class="card"><p class="eyebrow">MPS LICENCE ACCOUNT</p>
+{% extends 'mps_store/base.html' %}{% block content %}<link rel="stylesheet" href="{{ url_for('mps_store.static',filename='licences.css') }}"><div class="mps-store"><section class="card"><p class="eyebrow">MPS LICENCE ACCOUNT</p>
 <h1>{{ {'register':'Create your account','login':'Sign in','verify':'Verify your email','verify-confirm':'Confirm your email','mfa-setup':'Set up multi-factor authentication','mfa':'Verify your sign-in','recovery':'Save your recovery codes','forgot':'Reset your password','reset':'Choose a new password'}[kind] }}</h1>
 {% if kind == 'recovery' %}<p>Keep these one-use codes somewhere safe. They let you sign in if you lose your authenticator. They will not be shown again.</p><ul>{% for code in codes %}<li><code>{{ code }}</code></li>{% endfor %}</ul><a href="{{ url_for('mps_accounts.dashboard') }}">Continue to your licences</a>
 {% else %}<form method="post"><input type="hidden" name="csrf" value="{{ csrf }}">

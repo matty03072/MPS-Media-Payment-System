@@ -1,5 +1,15 @@
 # Preview changes
 
+## Next — licensing release candidate
+
+- Added ten-member free allowance and £5/month subscription unlock for up to three applications.
+- Added installation-bound signed leases, periodic checks, retained-data fallback and registration removal.
+- Added separate verified-email/MFA licence accounts and owner-only Stripe fulfilment/email service.
+- Added MPS-branded licence storefront and email templates.
+- Changed new-build terms to the MPS Source-Available No-Resale Licence; membership-service payments remain permitted and earlier grants remain unchanged.
+- Fixed Docker context inclusion of the shared licence verifier and added candidate image checks.
+- Paid launch remains blocked until integrated sandbox and commercial-policy checks complete.
+
 ## 0.1.0-beta.5
 
 - Added Configuration → Branding with a custom site name and validated logo uploads.

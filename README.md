@@ -132,5 +132,20 @@ Removing an application registration disables that application on its next check
 (or by the current check's expiry offline), retaining its data. Removing a
 registration does not cancel the subscription; billing is managed separately.
 
-This feature branch is not a released build. The real issuer public key and live
-service proof are required before the release preflight permits publishing.
+### Licensing release candidate
+
+The licensing changes are a release candidate, not yet enabled for paid sales.
+The licence site is https://members.streaminghome.app/mps. The client includes
+only its HTTPS origin and public verification key, never server credentials.
+See [application licensing](docs/APPLICATION-LICENSING.md) for activation,
+limits, cancellation effects and upgrade preparation.
+
+Existing preview installations with more than ten enabled non-admin members
+should back up `/state` and read the new terms before updating. Once installed,
+the licensing build enforces the free allowance until a valid subscription is
+activated. Do not update a larger installation expecting an automatic paid unlock.
+Earlier releases retain their original licence terms; this change is prospective.
+
+The release preflight checks public-key configuration and matching terms only.
+It does **not** prove payment, webhook, SMTP or activation availability. Paid sales
+remain gated on integrated sandbox verification and published commercial policies.

@@ -1,0 +1,30 @@
+name: Licensing release checks
+on:
+  push:
+    branches: [main, feature/licensing]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - run: pip install -r requirements.txt
+      - run: python -m unittest installer.test_installation installer.test_umbrel.UmbrelTests installer.test_branding.BrandingTests -q
+      - run: PYTHONPATH=.:tests python -m unittest discover -s tests -q
+      - run: PYTHONPATH=.:tests python -m unittest discover -s licence_store/tests -q
+      - run: python installer/check_licensing_release.py
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build release candidate without publishing
+        run: docker build -t mps-licensing-candidate .
+      - name: Verify packaged client and restart behaviour
+        run: bash container-smoke.sh mps-licensing-candidate linux/amd64
