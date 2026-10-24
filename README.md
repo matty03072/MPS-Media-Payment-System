@@ -132,9 +132,9 @@ Removing an application registration disables that application on its next check
 (or by the current check's expiry offline), retaining its data. Removing a
 registration does not cancel the subscription; billing is managed separately.
 
-### Licensing release candidate
+### Application licensing
 
-The licensing changes are a release candidate, not yet enabled for paid sales.
+Version 0.1.0-beta.6 introduces the application licensing terms below.
 The licence site is https://members.streaminghome.app/mps. The client includes
 only its HTTPS origin and public verification key, never server credentials.
 See [application licensing](docs/APPLICATION-LICENSING.md) for activation,
@@ -147,5 +147,5 @@ activated. Do not update a larger installation expecting an automatic paid unloc
 Earlier releases retain their original licence terms; this change is prospective.
 
 The release preflight checks public-key configuration and matching terms only.
-It does **not** prove payment, webhook, SMTP or activation availability. Paid sales
-remain gated on integrated sandbox verification and published commercial policies.
+It does **not** prove payment, webhook, SMTP or activation availability. The real sandbox payment, webhook, licence-email, activation and refund checks
+were completed before release. The purchase site displays current sales availability.

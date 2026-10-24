@@ -1,6 +1,6 @@
 # Preview changes
 
-## Next — licensing release candidate
+## 0.1.0-beta.6 — application licensing
 
 - Added ten-member free allowance and £5/month subscription unlock for up to three applications.
 - Added installation-bound signed leases, periodic checks, retained-data fallback and registration removal.
@@ -12,7 +12,7 @@
 - Added self-service period-end cancellation and idempotent full refunds requested within 14 days of payment, including renewals.
 - Added seller, cancellation/refund and privacy pages plus durable subscription terms in licence emails.
 - Verified a real sandbox webhook, automatic licence email receipt, activation and cancellation/refund.
-- Paid launch remains gated on complete public seller-contact disclosure and final release checks.
+- Published seller/contact and cancellation/privacy notices; support remains a signed-in form.
 
 ## 0.1.0-beta.5
 

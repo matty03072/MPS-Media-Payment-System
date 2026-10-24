@@ -69,13 +69,12 @@ before installing the licensing build. Do not delete/reinstall to upgrade.
 Installations over the free allowance need an active unlock subscription to keep
 all enabled members' MPS access. Review these changes before upgrading.
 
-## Current release status
+## Release verification
 
-This is the licensing release candidate. Paid sales are disabled. Automated tests
+Version 0.1.0-beta.6 is the licensing release. Automated tests
 cover signatures, invalid/test/expired leases, member boundaries, MFA/CSRF,
 webhook replay, email retries and registration limits. On 24 October 2026, an isolated Stripe sandbox purchase verified genuine network
 webhook delivery/signatures, automatic issuance, inbox receipt and activation.
 The receiver and isolated worker were bridged by exporting the authenticated event;
 this was not a production purchase. Real sandbox period-end cancellation and a
-full refund also succeeded. Paid launch still requires complete public seller contact
-disclosures and final release checks.
+full refund also succeeded. Seller contact and policy disclosures are published on the purchase site.

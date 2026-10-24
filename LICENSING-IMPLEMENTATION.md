@@ -1,6 +1,6 @@
 # MPS licensing implementation
 
-Status: owner licence service deployed with sales disabled; client licensing release candidate not yet released.
+Status: owner licence service deployed; beta.6 client release includes application licensing.
 
 ## Requested outcome
 
@@ -62,4 +62,4 @@ events; unpaid/wrong-price/wrong-mode checkout rejection; retry after payment an
 SMTP failures; admin authentication/CSRF; SQL Server migration and restart; real
 Stripe test checkout, email and activation. The cancellation/refund policy is now specified in the customer documentation: cancellation
 at period end, full latest-payment refund for requests within 14 days, and paid access
-retained until period end. Public legal-contact disclosure remains a launch gate.
+retained until period end. Public seller/contact and policy disclosures are published on the purchase site.
